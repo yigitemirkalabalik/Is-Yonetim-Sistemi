@@ -1,0 +1,2483 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Akış — Ekip Yönetimi</title>
+<link rel="icon" id="favicon-link" href="data:,">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&family=Lora:wght@400;500;600&family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#14161b;
+    --surface:#1c1f26;
+    --surface-2:#20232c;
+    --surface-3:#262a34;
+    --border:#2a2e39;
+    --border-soft:#23262f;
+    --text:#eceef1;
+    --text-dim:#8d93a3;
+    --text-faint:#565c6c;
+    --accent:#e8a33d;
+    --accent-dim:rgba(232,163,61,.14);
+    --accent-contrast:#1a1305;
+    --danger:#e5595e;
+    --danger-dim:rgba(229,89,94,.14);
+    --success:#4cb782;
+    --success-dim:rgba(76,183,130,.14);
+    --warn:#e8a33d;
+    --info:#5a9bd8;
+    --info-dim:rgba(90,155,216,.14);
+    --important:#e0883c;
+    --important-dim:rgba(224,136,60,.16);
+    --radius:12px;
+    --radius-lg:18px;
+    --font-display:'Space Grotesk',sans-serif;
+    --font-mono:'IBM Plex Mono',monospace;
+    --font-body:'Inter',system-ui,sans-serif;
+    --ease:cubic-bezier(.16,1,.3,1);
+    --ease-spring:cubic-bezier(.22,1.28,.4,1);
+    --dur-fast:150ms;
+    --dur-base:240ms;
+    --shadow-sm:0 2px 8px rgba(0,0,0,.18);
+    --shadow-md:0 10px 30px rgba(0,0,0,.24);
+    --shadow-lg:0 24px 60px rgba(0,0,0,.34);
+  }
+  *{box-sizing:border-box;}
+
+  /* ---------- appearance: background themes ---------- */
+  html[data-theme="black"]{ --bg:#000000; --surface:#111111; --surface-2:#171717; --surface-3:#1e1e1e; --border:#282828; --border-soft:#1f1f1f; }
+  html[data-theme="midnight"]{ --bg:#0d1220; --surface:#141b2e; --surface-2:#192138; --surface-3:#1f2844; --border:#28324d; --border-soft:#1e2740; }
+  html[data-theme="coffee"]{ --bg:#19140f; --surface:#221b14; --surface-2:#2a2118; --surface-3:#32271c; --border:#3c3123; --border-soft:#2e2519; }
+  html[data-theme="forest"]{ --bg:#0f1712; --surface:#161f19; --surface-2:#1b271f; --surface-3:#213026; --border:#2b3a30; --border-soft:#212e26; }
+  html[data-theme="plum"]{ --bg:#160f1a; --surface:#1e1522; --surface-2:#251a2b; --surface-3:#2c2033; --border:#392a42; --border-soft:#2c2033; }
+  html[data-theme="ocean"]{ --bg:#081a1c; --surface:#0f2528; --surface-2:#143036; --surface-3:#193a41; --border:#20464c; --border-soft:#183a3f; }
+  html[data-theme="rose"]{ --bg:#1a0f13; --surface:#241419; --surface-2:#2c181f; --surface-3:#341c25; --border:#402531; --border-soft:#331c26; }
+  html[data-theme="ink"]{ --bg:#0a0e17; --surface:#111726; --surface-2:#161e30; --surface-3:#1b2438; --border:#232e48; --border-soft:#1b2438; }
+  html[data-theme="slate"]{ --bg:#15171a; --surface:#1c1f23; --surface-2:#22262b; --surface-3:#282c32; --border:#33383f; --border-soft:#292d33; }
+  html[data-theme="paper"]{ --bg:#f5f5f3; --surface:#ffffff; --surface-2:#ececea; --surface-3:#e2e0db; --border:#d8d6d1; --border-soft:#e4e2dd; --text:#1c1e22; --text-dim:#5b6170; --text-faint:#9a9fa8; }
+  html[data-theme="sand"]{ --bg:#efe3cc; --surface:#fbf6ea; --surface-2:#e8daba; --surface-3:#ddc9a0; --border:#d4bd8d; --border-soft:#ddc9a0; --text:#2c2312; --text-dim:#6f5f3f; --text-faint:#a5936a; }
+  html[data-theme="sky"]{ --bg:#dceafa; --surface:#f7fbff; --surface-2:#c9def2; --surface-3:#bcd3e9; --border:#a9c6e2; --border-soft:#bcd3e9; --text:#0f1f31; --text-dim:#3d5975; --text-faint:#7093b3; }
+  html[data-theme="garden"]{ --bg:#dcefd4; --surface:#f7fdf4; --surface-2:#c9e5bd; --surface-3:#bbdaae; --border:#a6cd97; --border-soft:#bbdaae; --text:#12250f; --text-dim:#3f5c37; --text-faint:#749169; }
+  html[data-theme="lilac"]{ --bg:#e7dcf5; --surface:#faf6ff; --surface-2:#d9c7ee; --surface-3:#d0b6e6; --border:#c1a3dd; --border-soft:#d0b6e6; --text:#1f1129; --text-dim:#553f6b; --text-faint:#8873a0; }
+  html[data-theme="peach"]{ --bg:#fbdfcb; --surface:#fff8f2; --surface-2:#f6ccae; --surface-3:#eebd98; --border:#e6ac82; --border-soft:#eebd98; --text:#2e1a0d; --text-dim:#71492f; --text-faint:#a67c5c; }
+
+  html,body{margin:0;padding:0;}
+  body{
+    background-color:var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 12% -10%, color-mix(in srgb, var(--accent) 8%, transparent), transparent 60%),
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,.03) 1px, transparent 0);
+    background-size:auto, 22px 22px;
+    background-attachment:fixed, fixed;
+    color:var(--text);
+    font-family:var(--font-body);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--accent-dim);color:var(--accent);}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px;}
+  button{font-family:inherit;cursor:pointer;}
+  input,textarea,select{font-family:inherit;}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background-color:var(--border);border-radius:20px;border:3px solid var(--bg);background-clip:padding-box;}
+  *{scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+
+  #app{max-width:1680px;margin:0 auto;padding:22px 32px 80px;}
+  @media (max-width:720px){ #app{padding:14px 14px 60px;} }
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;
+    position:sticky;top:0;z-index:40;
+    margin:0 -24px 22px;padding:14px 24px;
+    background:color-mix(in srgb, var(--bg) 74%, transparent);backdrop-filter:blur(14px) saturate(150%);
+    -webkit-backdrop-filter:blur(14px) saturate(150%);
+    box-shadow:0 1px 0 var(--border-soft), 0 12px 24px -12px rgba(0,0,0,.2);
+  }
+  @media (max-width:720px){ .topbar{margin:0 -14px 16px;padding:10px 14px;} }
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand-mark{
+    width:32px;height:32px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(155deg, color-mix(in srgb, var(--accent) 88%, white), color-mix(in srgb, var(--accent) 60%, black));
+    color:var(--accent-contrast);font-family:var(--font-display);font-weight:700;font-size:15px;
+    box-shadow:0 4px 12px color-mix(in srgb, var(--accent) 35%, transparent);
+  }
+  .brand h1{font-family:var(--font-display);font-weight:700;font-size:19px;margin:0;letter-spacing:-.01em;}
+  .panel-switch{display:flex;gap:2px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;}
+  .panel-switch button{
+    border:none;background:transparent;color:var(--text-dim);padding:7px 14px;border-radius:7px;
+    font-size:13.5px;font-weight:600;transition:all var(--dur-fast) var(--ease);
+  }
+  .panel-switch button.active{background:var(--accent);color:var(--accent-contrast);}
+  .topbar-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .icon-btn{
+    width:36px;height:36px;border-radius:9px;border:1px solid var(--border);background:var(--surface);
+    color:var(--text-dim);display:flex;align-items:center;justify-content:center;position:relative;
+    transition:color var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease-spring);
+  }
+  .icon-btn:hover{color:var(--text);border-color:var(--text-faint);}
+  .icon-btn:active{transform:scale(.92);}
+  .icon-btn .dot{position:absolute;top:-3px;right:-3px;width:10px;height:10px;border-radius:50%;background:var(--danger);border:2px solid var(--bg);display:none;}
+  .icon-btn .dot.show{display:block;}
+  .identity-chip{
+    display:flex;align-items:center;gap:8px;padding:5px 12px 5px 6px;border-radius:20px;
+    background:var(--surface);border:1px solid var(--border);
+  }
+  .avatar{
+    width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;font-family:var(--font-display);color:#111;flex-shrink:0;
+  }
+  .identity-chip .who{display:flex;flex-direction:column;line-height:1.15;}
+  .identity-chip .who b{font-size:12.5px;font-weight:600;}
+  .identity-chip .who span{font-size:10.5px;color:var(--text-dim);}
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:9px;border:1px solid var(--border);
+    background:var(--surface);color:var(--text);font-size:13.5px;font-weight:600;
+    transition:border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease-spring), filter var(--dur-fast) var(--ease);
+  }
+  .btn:hover{border-color:var(--text-faint);}
+  .btn:active{transform:scale(.96);}
+  .btn-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-contrast);}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-danger{background:var(--danger-dim);border-color:transparent;color:var(--danger);}
+  .btn-success{background:var(--success-dim);border-color:transparent;color:var(--success);}
+  .btn-ghost{background:transparent;border-color:transparent;color:var(--text-dim);}
+  .btn-ghost:hover{color:var(--text);background:var(--surface);}
+  .btn-sm{padding:6px 11px;font-size:12.5px;border-radius:7px;}
+  .btn:disabled{opacity:.45;cursor:not-allowed;}
+
+  /* ---------- sub tabs ---------- */
+  .subtabs{display:flex;gap:2px;margin-bottom:20px;border-bottom:1px solid var(--border-soft);overflow-x:auto;}
+  .subtab{
+    padding:11px 4px;margin-right:22px;border:none;background:transparent;position:relative;flex-shrink:0;
+    color:var(--text-faint);font-size:13.5px;font-weight:600;transition:color var(--dur-fast) var(--ease);
+    display:flex;align-items:center;gap:7px;
+  }
+  .subtab svg{opacity:.8;flex-shrink:0;}
+  .subtab:hover{color:var(--text-dim);}
+  .subtab.active{color:var(--accent);}
+  .subtab.active svg{opacity:1;}
+  .subtab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent);border-radius:2px 2px 0 0;}
+  .subtab .count{font-family:var(--font-mono);font-size:10.5px;opacity:.7;background:var(--surface-3);padding:1px 6px;border-radius:9px;}
+  .subtab.active .count{background:var(--accent-dim);opacity:1;}
+
+  .toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px;flex-wrap:wrap;}
+  .search-input{
+    flex:1;min-width:180px;padding:9px 13px;border-radius:9px;border:1px solid var(--border);
+    background:var(--surface);color:var(--text);font-size:13.5px;
+  }
+  .search-input::placeholder{color:var(--text-faint);}
+
+  /* ---------- cards ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;}
+  @keyframes cardIn{ from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;
+    transition:transform var(--dur-fast) var(--ease-spring), border-color var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease);
+    cursor:pointer;position:relative;overflow:hidden;animation:cardIn .38s var(--ease) both;
+  }
+  .card:hover{border-color:color-mix(in srgb, var(--accent) 35%, var(--border));transform:translateY(-3px);box-shadow:var(--shadow-md);}
+  .card.urg-important::before, .card.urg-urgent::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:4px;pointer-events:none;z-index:2;
+  }
+  .card.urg-important::before{background:var(--important);}
+  .card.urg-urgent::before{background:var(--danger);}
+  .card.has-cover{padding:0;}
+  .card-cover{margin:0;height:96px;position:relative;background:var(--surface-3) center/cover no-repeat;}
+  .card-cover::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg, rgba(20,22,27,0) 45%, rgba(20,22,27,.65) 100%);}
+  .card-cover-body{padding:16px;}
+  /* sürükle-bırak: kart havada sürüklenirken diğerleri kenara kayarak yer açar (FLIP animasyonu) */
+  .card-placeholder{border:1.5px dashed color-mix(in srgb, var(--accent) 50%, var(--border));border-radius:var(--radius-lg);background:var(--accent-dim);animation:none;}
+  .card.dragging-float{position:fixed;z-index:200;margin:0;pointer-events:none;box-shadow:var(--shadow-lg);animation:none;}
+  .card.dragging-card{opacity:.4;}
+  .card.drag-over{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-dim);}
+  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:8px;}
+  .card-title{font-family:var(--font-display);font-weight:600;font-size:15px;line-height:1.3;}
+  .card-desc{color:var(--text-dim);font-size:13px;line-height:1.5;margin:6px 0 10px;
+    display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--text-faint);}
+  .badge{
+    display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;
+    font-family:var(--font-mono);letter-spacing:.02em;
+  }
+  .badge-normal{background:var(--surface-3);color:var(--text-dim);}
+  .badge-important{background:var(--important-dim);color:var(--important);}
+  .badge-urgent{background:var(--danger-dim);color:var(--danger);}
+  .badge-success{background:var(--success-dim);color:var(--success);}
+  .badge-pending{background:var(--accent-dim);color:var(--accent);}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--text-dim);}
+  .empty-state h3{font-family:var(--font-display);color:var(--text);margin:10px 0 6px;}
+  .empty-state p{font-size:13.5px;max-width:360px;margin:0 auto;}
+
+  /* ---------- team panel ---------- */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+  .team-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;}
+  .team-card-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--border-soft);}
+  .team-card-head .avatar{width:38px;height:38px;font-size:14px;}
+  .team-card-head b{font-family:var(--font-display);font-size:14.5px;display:block;}
+  .team-card-head span{font-size:12px;color:var(--text-dim);}
+  .team-item{padding:8px 6px;border-bottom:1px solid var(--border-soft);border-radius:6px;cursor:pointer;transition:filter var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);margin:0 -6px;background:var(--surface-3);}
+  .team-item:hover{filter:brightness(.9);}
+  .team-item.urg-important{background:var(--important);color:#fff;}
+  .team-item.urg-important .team-item-sub{color:rgba(255,255,255,.75);}
+  .team-item.urg-important:hover{filter:brightness(.82);background:var(--important);}
+  .team-item.urg-urgent{background:var(--danger);color:#fff;}
+  .team-item.urg-urgent .team-item-sub{color:rgba(255,255,255,.75);}
+  .team-item.urg-urgent:hover{filter:brightness(.82);background:var(--danger);}
+  .team-item.urg-important .badge, .team-item.urg-urgent .badge{background:rgba(255,255,255,.25);color:#fff;}
+  .team-item:last-child{border-bottom:none;}
+  .team-item-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;justify-content:space-between;}
+  .team-item-sub{font-size:11.5px;color:var(--text-faint);margin-top:2px;}
+  .team-empty{font-size:12.5px;color:var(--text-faint);padding:6px 0;}
+
+  /* ---------- calendar (minimal) ---------- */
+  .apt-layout{display:grid;grid-template-columns:minmax(240px,300px) 1px 1fr;gap:18px;align-items:start;}
+  .apt-divider{align-self:stretch;width:1px;background:var(--border-soft);opacity:.7;}
+  @media (max-width:800px){ .apt-layout{grid-template-columns:1fr;} .apt-divider{display:none;} }
+  .cal-hr{height:1px;background:var(--border-soft);opacity:.7;margin:2px 0 10px;}
+  .cal-card{padding:14px;}
+  .cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .cal-head b{font-family:var(--font-display);font-size:13.5px;}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+  .cal-dow{font-size:9.5px;color:var(--text-faint);text-align:center;padding:2px 0 4px;font-weight:600;}
+  .cal-day{
+    min-height:34px;border:1px solid transparent;border-radius:6px;background:transparent;
+    font-size:11px;color:var(--text-dim);position:relative;transition:all var(--dur-fast) var(--ease);
+    display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:2px;padding-top:5px;cursor:pointer;
+  }
+  .cal-day:hover{background:var(--surface-2);border-color:var(--border);}
+  .cal-day.other{opacity:.28;}
+  .cal-day.today .num{color:var(--accent-contrast);background:var(--accent);border-radius:50%;}
+  .cal-day .num{font-weight:600;color:var(--text);width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%;font-size:11px;}
+  .cal-day .dots{display:flex;gap:2px;}
+  .cal-day .apt-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);}
+  .cal-day .apt-dot.urgent{background:var(--danger);}
+  .cal-legend{display:flex;gap:14px;margin-top:10px;font-size:10.5px;color:var(--text-faint);}
+  .cal-legend span{display:flex;align-items:center;gap:5px;}
+  .cal-legend .apt-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);}
+  .cal-legend .apt-dot.urgent{background:var(--danger);}
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed;inset:0;background:rgba(8,9,12,.6);backdrop-filter:blur(3px);z-index:100;
+    display:flex;align-items:center;justify-content:center;padding:20px;
+    animation:fadeIn var(--dur-base) var(--ease);
+  }
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .modal{
+    background:var(--surface);border:1px solid var(--border);border-top:3px solid transparent;border-radius:var(--radius-lg);
+    width:100%;max-width:520px;max-height:88vh;overflow-y:auto;box-shadow:var(--shadow-lg);
+    animation:slideUp var(--dur-base) var(--ease);
+  }
+  .modal.modal-wide{max-width:720px;}
+  .modal.workspace-modal{max-width:97vw;width:1420px;height:88vh;max-height:88vh;display:flex;flex-direction:column;padding:0;}
+  .ws-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 18px;border-bottom:1px solid var(--border-soft);border-radius:var(--radius-lg) var(--radius-lg) 0 0;flex-shrink:0;}
+  .ws-title-input{flex:1;border:none;background:transparent;color:var(--text);font-family:var(--font-display);font-size:18px;font-weight:600;padding:4px 0;}
+  .ws-title-input:focus{outline:none;}
+  .ws-title-input[readonly]{cursor:default;}
+  .ws-top-actions{display:flex;gap:6px;flex-shrink:0;}
+  .ws-body{flex:1;display:grid;grid-template-columns:200px 1fr 280px;overflow:hidden;min-height:0;}
+  .ws-col{overflow-y:auto;padding:16px;}
+  .ws-col-list{border-right:1px solid var(--border-soft);display:flex;flex-direction:column;gap:2px;background:var(--surface-2);}
+  .ws-col-side{border-left:1px solid var(--border-soft);display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+  .side-box{padding:16px;}
+  .side-box-head{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);font-weight:700;margin-bottom:10px;}
+  .side-box-log{flex:1;overflow-y:auto;border-top:1px solid var(--border-soft);min-height:120px;}
+  .log-row{font-size:12px;padding:8px 0;border-bottom:1px solid var(--border-soft);color:var(--text-dim);line-height:1.5;}
+  .log-row:last-child{border-bottom:none;}
+  .log-row .small-note{display:block;margin-top:2px;}
+  .ws-list-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;font-size:12.5px;color:var(--text-dim);cursor:pointer;transition:background var(--dur-fast) var(--ease);}
+  .ws-list-item .dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .ws-list-item:hover{background:var(--surface-3);}
+  .ws-list-item.active{background:var(--accent-dim);color:var(--accent);font-weight:600;}
+  .ws-textarea{width:100%;height:100%;min-height:100%;border:none;background:transparent;color:var(--text);font-family:var(--font-body);font-size:14px;line-height:1.6;resize:none;}
+  .ws-textarea:focus{outline:none;}
+  .ws-foot{padding:8px 18px;font-size:10.5px;color:var(--text-faint);border-top:1px solid var(--border-soft);flex-shrink:0;}
+  @media (max-width:860px){ .ws-body{grid-template-columns:1fr;} .ws-col-list,.ws-col-side{border:none;border-top:1px solid var(--border-soft);} .modal.workspace-modal{height:92vh;} }
+  .modal-body.two-col{display:grid;grid-template-columns:1fr 1fr;gap:24px;padding:20px;}
+  .modal-body.two-col .col-left,.modal-body.two-col .col-right{display:flex;flex-direction:column;gap:14px;}
+  @media (max-width:640px){ .modal-body.two-col{grid-template-columns:1fr;} }
+  .file-drop-big{
+    flex:1;min-height:120px;border:1.5px dashed var(--border);border-radius:var(--radius);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    color:var(--text-faint);cursor:pointer;transition:all var(--dur-fast) var(--ease);text-align:center;padding:16px;
+  }
+  .file-drop-big:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+  .file-drop-big span{font-size:12px;}
+  @keyframes slideUp{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .modal-head{padding:18px 20px;border-bottom:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;}
+  .modal-head h3{font-family:var(--font-display);margin:0;font-size:16.5px;}
+  .modal-body{padding:20px;display:flex;flex-direction:column;gap:14px;}
+  .modal-foot{padding:16px 20px;border-top:1px solid var(--border-soft);display:flex;justify-content:flex-end;gap:8px;}
+  .field label{display:block;font-size:12.5px;font-weight:600;color:var(--text-dim);margin-bottom:6px;}
+  .field input[type=text],.field input[type=date],.field input[type=time],.field textarea,.field select{
+    width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);
+    color:var(--text);font-size:13.5px;
+  }
+  .field textarea{resize:vertical;min-height:70px;}
+  .urgency-dots{display:flex;align-items:center;gap:12px;}
+  .urgency-dot-opt{display:flex;cursor:pointer;padding:3px;}
+  .urgency-dot-opt .dot{width:24px;height:24px;border-radius:50%;border:2px solid transparent;transition:all var(--dur-fast) var(--ease);display:block;}
+  .urgency-dot-opt[data-v="normal"] .dot{background:var(--text-faint);}
+  .urgency-dot-opt[data-v="important"] .dot{background:var(--important);}
+  .urgency-dot-opt[data-v="urgent"] .dot{background:var(--danger);}
+  .urgency-dot-opt:hover .dot{transform:scale(1.2);}
+  .urgency-dot-opt.active .dot{border-color:var(--text);box-shadow:0 0 0 2px var(--bg), 0 0 0 3px currentColor;transform:scale(1.12);}
+  .people-pick{display:flex;flex-wrap:wrap;gap:6px;}
+  .people-pick .chip{
+    padding:6px 12px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);cursor:pointer;
+    font-size:12.5px;font-weight:600;color:var(--text-dim);display:flex;align-items:center;gap:6px;
+    transition:all var(--dur-fast) var(--ease);
+  }
+  .people-pick .chip:hover{border-color:var(--text-faint);color:var(--text);transform:translateY(-1px);}
+  .people-pick .chip.active{background:var(--accent-dim);border-color:color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent);}
+  .people-pick .chip.active:hover{color:var(--accent);}
+
+  /* ---------- appearance: theme / font / color pickers ---------- */
+  .theme-row{display:flex;gap:10px;margin-bottom:4px;flex-wrap:wrap;}
+  .theme-swatch{
+    width:38px;height:38px;border-radius:11px;cursor:pointer;border:2px solid var(--border);
+    padding:0;transition:border-color var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  }
+  .theme-swatch:hover{transform:scale(1.09);}
+  .theme-swatch.selected{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-dim);}
+  .option-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .option-chip{
+    padding:8px 14px;border-radius:20px;border:1px solid var(--border);
+    background:var(--surface-2);color:var(--text-dim);font-size:12.5px;cursor:pointer;font-weight:600;
+    transition:border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+  }
+  .option-chip:hover{border-color:var(--text-faint);color:var(--text);transform:translateY(-1px);}
+  .option-chip.selected{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+  .option-chip.selected:hover{color:var(--accent);}
+  .color-row{display:flex;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
+  .color-swatch{
+    width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;
+    transition:transform var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+  }
+  .color-swatch:hover{transform:scale(1.12);}
+  .color-swatch.selected{border-color:var(--text);transform:scale(1.16);box-shadow:0 0 0 3px rgba(255,255,255,.08);}
+  .color-swatch.disabled{opacity:.2;cursor:not-allowed;filter:grayscale(.4);}
+  .color-swatch.disabled:hover{transform:none;}
+  .color-swatch-custom{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;border-color:var(--border);}
+  .color-swatch-custom::after{content:"+";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none;}
+  .color-swatch-custom.selected::after{content:"";}
+  .color-swatch-custom input[type=color]{position:absolute;inset:0;width:100%;height:100%;border:none;padding:0;margin:0;opacity:0;cursor:pointer;}
+  .field-label{font-family:var(--font-mono);font-size:11px;color:var(--text-faint);display:block;margin:14px 0 8px;text-transform:uppercase;letter-spacing:.04em;}
+  .field-label:first-child{margin-top:0;}
+  code{font-family:var(--font-mono);background:var(--surface-3);padding:1px 5px;border-radius:4px;font-size:11px;}
+  .field-hint{font-size:11.5px;color:var(--text-faint);margin:6px 0 0;line-height:1.5;}
+  .approver-row{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--border-soft);}
+  .approver-row:last-child{border-bottom:none;}
+  .approver-note{font-size:11.5px;color:var(--text-faint);margin-top:2px;}
+
+  /* ---------- proje dosyaları ---------- */
+  .file-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:8px;}
+  .file-chip{position:relative;background:var(--surface-2);border:1px solid var(--border);border-radius:9px;padding:6px;text-align:center;transition:border-color var(--dur-fast) var(--ease);}
+  .file-chip:hover{border-color:var(--text-faint);}
+  .file-chip img{width:100%;height:52px;object-fit:cover;border-radius:6px;margin-bottom:4px;}
+  .file-icon{width:100%;height:52px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--surface-3);border-radius:6px;margin-bottom:4px;}
+  .file-name{font-size:10px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .file-dl{position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:5px;background:rgba(0,0,0,.45);color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;text-decoration:none;}
+  .file-del{position:absolute;top:4px;left:4px;width:18px;height:18px;border-radius:5px;background:rgba(0,0,0,.45);color:#fff;border:none;display:flex;align-items:center;justify-content:center;font-size:10px;cursor:pointer;}
+  .file-cover-btn{position:absolute;bottom:22px;right:4px;width:18px;height:18px;border-radius:5px;background:rgba(0,0,0,.45);color:rgba(255,255,255,.6);border:none;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;transition:all var(--dur-fast) var(--ease-spring);}
+  .file-cover-btn:hover{color:#fff;transform:scale(1.15);}
+  .file-cover-btn.active{color:var(--accent);background:rgba(0,0,0,.6);}
+  .file-add{display:flex;align-items:center;justify-content:center;text-align:center;height:66px;border:1.5px dashed var(--border);border-radius:9px;font-size:10.5px;line-height:1.3;color:var(--text-faint);cursor:pointer;transition:all var(--dur-fast) var(--ease);padding:4px;overflow:hidden;word-break:break-word;}
+  .file-add:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ---------- sticky notifications ---------- */
+  .sticky-stack{position:fixed;bottom:20px;right:20px;z-index:200;display:flex;flex-direction:column;gap:10px;max-width:340px;width:calc(100vw - 40px);}
+  .sticky-note{
+    background:var(--surface);border:1px solid var(--danger);border-left:4px solid var(--danger);border-radius:12px;
+    padding:14px 16px;box-shadow:var(--shadow-lg);animation:popIn .3s var(--ease);
+  }
+  @keyframes popIn{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+  .sticky-note .head{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--danger);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px;}
+  .sticky-note p{margin:0 0 10px;font-size:13.5px;line-height:1.45;}
+  .sticky-note .row{display:flex;gap:6px;flex-wrap:wrap;}
+
+  .toast{
+    position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surface-3);
+    border:1px solid var(--border);padding:10px 18px;border-radius:20px;font-size:13px;z-index:300;
+    box-shadow:var(--shadow-md);animation:popIn .25s var(--ease);
+  }
+
+  /* ---------- gerçek yapışkan not tarzı Notlar sekmesi (serbest tuvale) ---------- */
+  .notes-canvas{position:relative;min-height:520px;border:1px dashed var(--border-soft);border-radius:var(--radius-lg);background:var(--surface);overflow:hidden;}
+  /* not rengi artık serbest seçim değil, önem düzeyine bağlı — solgun/kısık tonlar + beyaz metin */
+  .paper-note{
+    --rot:0deg;
+    position:absolute;width:76px;height:76px;border-radius:8px;
+    display:flex;flex-direction:column;overflow:hidden;color:#fff;cursor:grab;
+    box-shadow:0 6px 14px rgba(0,0,0,.22);
+    transform:rotate(var(--rot));z-index:1;
+    transition:width var(--dur-base) var(--ease), height var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease), border-radius var(--dur-base) var(--ease);
+  }
+  .paper-note.pn-normal{background:#5b6270;}
+  .paper-note.pn-important{background:#a3652c;}
+  .paper-note.pn-urgent{background:#a1403f;}
+  .paper-note:hover, .paper-note.expanded{
+    width:196px;height:180px;border-radius:3px 3px 12px 12px;z-index:30;
+    box-shadow:0 18px 34px rgba(0,0,0,.36);
+    transition:width var(--dur-base) var(--ease), height var(--dur-base) var(--ease), box-shadow var(--dur-base) var(--ease), border-radius var(--dur-base) var(--ease), transform var(--dur-base) var(--ease);
+    transform:rotate(0deg);
+  }
+  .paper-note.dragging{cursor:grabbing;transition:none;box-shadow:0 26px 50px rgba(0,0,0,.4);z-index:40;}
+  .paper-note .pn-collapsed-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:4px;overflow:hidden;
+    font-family:var(--font-display);font-size:19px;font-weight:700;line-height:1;color:rgba(255,255,255,.65);text-align:center;
+    text-transform:uppercase;white-space:nowrap;transition:opacity var(--dur-fast) var(--ease);}
+  .paper-note:hover .pn-collapsed-icon, .paper-note.expanded .pn-collapsed-icon{opacity:0;pointer-events:none;}
+  .paper-note .pn-full{position:absolute;inset:0;display:flex;flex-direction:column;opacity:0;transition:opacity var(--dur-fast) var(--ease);pointer-events:none;}
+  .paper-note:hover .pn-full, .paper-note.expanded .pn-full{opacity:1;pointer-events:auto;}
+  .pn-head{display:flex;align-items:center;justify-content:flex-end;padding:8px 8px 4px;}
+  .pn-close{width:20px;height:20px;border-radius:5px;border:none;background:transparent;color:rgba(255,255,255,.55);
+    display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;transition:all var(--dur-fast) var(--ease);}
+  .pn-close:hover{background:rgba(255,255,255,.15);color:#fff;}
+  .pn-text{flex:1;padding:2px 12px 8px;font-family:var(--font-mono);font-size:12.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word;color:#fff;
+    border:none;background:transparent;resize:none;outline:none;width:100%;}
+  .pn-text::placeholder{color:rgba(255,255,255,.4);}
+  .pn-foot{display:flex;align-items:center;justify-content:space-between;padding:0 12px 10px;font-size:10px;opacity:.75;font-family:var(--font-mono);gap:6px;color:#fff;}
+
+  .gate{position:fixed;inset:0;background:var(--bg);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;}
+  .gate-box{max-width:420px;width:100%;text-align:center;}
+  .gate-box .brand-mark{width:52px;height:52px;font-size:22px;margin:0 auto 18px;}
+  .gate-box h2{font-family:var(--font-display);font-size:22px;margin:0 0 6px;}
+  .gate-box p{color:var(--text-dim);font-size:13.5px;margin:0 0 24px;line-height:1.5;}
+  .gate-box .field{text-align:left;margin-bottom:12px;}
+
+  .empty-icon{font-size:34px;opacity:.5;}
+  .small-note{font-size:12px;color:var(--text-faint);line-height:1.5;}
+  .sync-status{font-size:11px;color:var(--text-faint);display:flex;align-items:center;gap:5px;}
+  .sync-dot{width:6px;height:6px;border-radius:50%;background:var(--text-faint);}
+  .sync-dot.ok{background:var(--success);}
+  .sync-dot.busy{background:var(--accent);animation:pulse 1s infinite;}
+  .sync-dot.err{background:var(--danger);}
+  @keyframes pulse{50%{opacity:.3}}
+  .admin-tag{font-size:9.5px;background:var(--accent-dim);color:var(--accent);padding:1px 6px;border-radius:6px;font-weight:700;margin-left:5px;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark">A</div>
+      <h1>Akış</h1>
+    </div>
+    <div class="panel-switch" id="panel-switch">
+      <button data-panel="me" class="active">Benim Panelim</button>
+      <button data-panel="team">Ekip Paneli</button>
+    </div>
+    <div class="topbar-right">
+      <span class="sync-status" id="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Bağlı değil</span></span>
+      <button class="icon-btn" id="notif-btn" title="Seni ilgilendirenler">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="dot" id="notif-dot"></span>
+      </button>
+      <button class="icon-btn" id="appearance-btn" title="Görünüm ayarları">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.9 0 1.5-.7 1.5-1.5 0-.4-.2-.8-.4-1.1-.2-.3-.4-.6-.4-1 0-.8.7-1.5 1.5-1.5H16c3.3 0 6-2.7 6-6 0-4.4-4.5-8-10-8z"/></svg>
+      </button>
+      <button class="icon-btn" id="github-btn" title="GitHub bağlantısı">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3.5-7.1M21 3v6h-6"/></svg>
+      </button>
+      <button class="icon-btn" id="admin-btn" title="Kullanıcı yönetimi" style="display:none">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      </button>
+      <div class="identity-chip" id="identity-chip"></div>
+      <button class="icon-btn" id="logout-btn" title="Çıkış yap">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="me-panel">
+    <div class="subtabs" id="subtabs"></div>
+    <div class="toolbar">
+      <input class="search-input" id="search-input" placeholder="Ara…">
+      <button class="btn btn-primary" id="new-btn">+ Yeni</button>
+    </div>
+    <div id="content-area"></div>
+  </div>
+
+  <div id="team-panel" style="display:none">
+    <div class="toolbar">
+      <input class="search-input" id="team-search" placeholder="Ekipte ara…">
+    </div>
+    <div class="team-grid" id="team-grid"></div>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div class="sticky-stack" id="sticky-stack"></div>
+<div id="toast-root"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ yardımcılar ============ */
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,8); }
+function esc(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtDate(d){ const dt=new Date(d); return dt.toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'}); }
+function fmtDateTime(d){ const dt=new Date(d); return dt.toLocaleDateString('tr-TR',{day:'numeric',month:'short'})+' · '+dt.toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}); }
+function addMinutesToTime(hhmm, mins){
+  const [h,m] = (hhmm||'09:00').split(':').map(Number);
+  const total = ((h*60+m+mins)%1440+1440)%1440;
+  return String(Math.floor(total/60)).padStart(2,'0')+':'+String(total%60).padStart(2,'0');
+}
+function aptTimeRangeShort(a){ return `${a.time||'09:00'}–${addMinutesToTime(a.time, a.durationMin||30)}`; }
+function aptTimeRangeFull(a){
+  const dt = new Date(a.date+'T'+(a.time||'09:00'));
+  return dt.toLocaleDateString('tr-TR',{day:'numeric',month:'short'})+' · '+aptTimeRangeShort(a);
+}
+function timeAgo(ts){
+  const s = Math.floor((Date.now()-ts)/1000);
+  if(s<60) return 'az önce';
+  if(s<3600) return Math.floor(s/60)+' dk önce';
+  if(s<86400) return Math.floor(s/3600)+' sa önce';
+  return Math.floor(s/86400)+' gün önce';
+}
+function avatarColor(name){
+  let h=0; for(const c of (name||'?')) h = (h*31 + c.charCodeAt(0)) % 360;
+  return `hsl(${h} 62% 58%)`;
+}
+function initials(name){
+  return (name||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
+}
+function showToast(msg){
+  const el = document.createElement('div');
+  el.className='toast'; el.textContent=msg;
+  document.getElementById('toast-root').appendChild(el);
+  setTimeout(()=>el.remove(), 2600);
+}
+function urgencyLabel(u){ return u==='urgent'?'Acil':u==='important'?'Önemli':'Normal'; }
+function urgencyBadge(u){ return `<span class="badge badge-${u}">${urgencyLabel(u)}</span>`; }
+
+/* ============ görünüm ayarları (cihaza özel, senkron olmaz) ============ */
+const PALETTE = [
+  {id:'red',hex:'#ef4444'},{id:'orange',hex:'#f97316'},{id:'amber',hex:'#f59e0b'},{id:'yellow',hex:'#eab308'},
+  {id:'lime',hex:'#84cc16'},{id:'green',hex:'#22c55e'},{id:'emerald',hex:'#10b981'},{id:'teal',hex:'#14b8a6'},
+  {id:'cyan',hex:'#06b6d4'},{id:'sky',hex:'#0ea5e9'},{id:'blue',hex:'#3b82f6'},{id:'indigo',hex:'#6366f1'},
+  {id:'violet',hex:'#8b5cf6'},{id:'purple',hex:'#a855f7'},{id:'pink',hex:'#ec4899'},{id:'rose',hex:'#f43f5e'}
+];
+const THEME_OPTIONS = [
+  {id:'graphite',label:'Grafit',bg:'#14161b',mode:'dark'}, {id:'black',label:'Siyah',bg:'#000000',mode:'dark'},
+  {id:'midnight',label:'Gece Mavisi',bg:'#0d1220',mode:'dark'}, {id:'coffee',label:'Kahve',bg:'#19140f',mode:'dark'},
+  {id:'forest',label:'Orman',bg:'#0f1712',mode:'dark'}, {id:'plum',label:'Erik',bg:'#160f1a',mode:'dark'},
+  {id:'ocean',label:'Okyanus',bg:'#081a1c',mode:'dark'}, {id:'rose',label:'Gül',bg:'#1a0f13',mode:'dark'},
+  {id:'ink',label:'Mürekkep',bg:'#0a0e17',mode:'dark'}, {id:'slate',label:'Arduvaz',bg:'#15171a',mode:'dark'},
+  {id:'paper',label:'Kağıt',bg:'#f5f5f3',mode:'light'}, {id:'sand',label:'Kum',bg:'#efe3cc',mode:'light'},
+  {id:'sky',label:'Gökyüzü',bg:'#dceafa',mode:'light'}, {id:'garden',label:'Bahçe',bg:'#dcefd4',mode:'light'},
+  {id:'lilac',label:'Leylak',bg:'#e7dcf5',mode:'light'}, {id:'peach',label:'Şeftali',bg:'#fbdfcb',mode:'light'}
+];
+const MIN_ACCENT_CONTRAST = 2.3;
+const DEFAULT_ACCENT_DARK = '#e8a33d';
+const DEFAULT_ACCENT_LIGHT = '#b45309';
+const LOCAL_APPEARANCE_KEY = 'akis_appearance';
+
+let appearanceSettings = { theme:'graphite', accent:'#e8a33d', advanced:false };
+
+function relLuminance(hex){
+  const h=hex.replace('#',''); let [r,g,b]=[0,2,4].map(i=>parseInt(h.substring(i,i+2),16)/255);
+  [r,g,b]=[r,g,b].map(c=> c<=0.03928 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4));
+  return 0.2126*r+0.7152*g+0.0722*b;
+}
+function contrastRatio(hexA,hexB){ const l1=relLuminance(hexA), l2=relLuminance(hexB); const hi=Math.max(l1,l2), lo=Math.min(l1,l2); return (hi+0.05)/(lo+0.05); }
+function getContrastTextColor(hex){
+  const h=hex.replace('#',''); const r=parseInt(h.substring(0,2),16), g=parseInt(h.substring(2,4),16), b=parseInt(h.substring(4,6),16);
+  return ((r*299+g*587+b*114)/1000) > 150 ? '#1a1305' : '#ffffff';
+}
+function hexToRgba(hex,alpha){ const h=hex.replace('#',''); const r=parseInt(h.substring(0,2),16), g=parseInt(h.substring(2,4),16), b=parseInt(h.substring(4,6),16); return `rgba(${r}, ${g}, ${b}, ${alpha})`; }
+function currentThemeBg(){ const t=THEME_OPTIONS.find(x=>x.id===appearanceSettings.theme); return t?t.bg:'#14161b'; }
+function currentThemeMode(){ const t=THEME_OPTIONS.find(x=>x.id===appearanceSettings.theme); return t?t.mode:'dark'; }
+
+function persistAppearance(){ localStorage.setItem(LOCAL_APPEARANCE_KEY, JSON.stringify(appearanceSettings)); }
+function loadAppearance(){
+  try{ const s = JSON.parse(localStorage.getItem(LOCAL_APPEARANCE_KEY)||'null'); if(s) appearanceSettings = {...appearanceSettings, ...s}; }catch(e){}
+  if(appearanceSettings.theme!=='graphite') document.documentElement.setAttribute('data-theme', appearanceSettings.theme);
+  applyAccentVars(appearanceSettings.accent);
+}
+function applyAccentVars(hex){
+  document.documentElement.style.setProperty('--accent', hex);
+  document.documentElement.style.setProperty('--accent-dim', hexToRgba(hex,.14));
+  document.documentElement.style.setProperty('--accent-contrast', getContrastTextColor(hex));
+}
+function applyTheme(id){
+  appearanceSettings.theme=id;
+  if(id==='graphite') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', id);
+  const bg = currentThemeBg();
+  if(contrastRatio(appearanceSettings.accent,bg) < MIN_ACCENT_CONTRAST){
+    const fallback = currentThemeMode()==='light' ? DEFAULT_ACCENT_LIGHT : DEFAULT_ACCENT_DARK;
+    applyAccent(fallback);
+    const row = document.getElementById('ap-accent-row'); if(row) renderAccentColorRow(row, fallback, bg, applyAccent);
+  }
+  persistAppearance();
+}
+function applyAccent(hex){ appearanceSettings.accent=hex; applyAccentVars(hex); persistAppearance(); }
+
+function renderAccentColorRow(rowEl, currentHex, bgHex, onSelect){
+  rowEl.innerHTML='';
+  const swatchEls=[];
+  PALETTE.forEach(c=>{
+    const usable = contrastRatio(c.hex,bgHex) >= MIN_ACCENT_CONTRAST;
+    const sw=document.createElement('div');
+    sw.className='color-swatch'+(c.hex.toLowerCase()===currentHex.toLowerCase()?' selected':'')+(usable?'':' disabled');
+    sw.style.background=c.hex; sw.title = usable ? c.id : `${c.id} — bu temada yeterince görünür değil`;
+    if(usable) sw.addEventListener('click', ()=>{ onSelect(c.hex); renderAccentColorRow(rowEl, c.hex, bgHex, onSelect); });
+    rowEl.appendChild(sw); swatchEls.push(sw);
+  });
+  const isCustom = !PALETTE.some(c=>c.hex.toLowerCase()===currentHex.toLowerCase());
+  const customSwatch=document.createElement('label');
+  customSwatch.className='color-swatch color-swatch-custom'+(isCustom?' selected':'');
+  customSwatch.title='Özel renk seç';
+  customSwatch.style.background = isCustom ? currentHex : 'conic-gradient(from 0deg, #e5595e, #e8a33d, #e6d24a, #4cb782, #4fa8e0, #9b7fe0, #e0648a, #e5595e)';
+  const colorInput=document.createElement('input'); colorInput.type='color'; colorInput.value = /^#[0-9a-fA-F]{6}$/.test(currentHex)?currentHex:'#e8a33d';
+  colorInput.addEventListener('input', ()=>{ customSwatch.style.background=colorInput.value; customSwatch.classList.add('selected'); swatchEls.forEach(s=>s.classList.remove('selected')); });
+  colorInput.addEventListener('change', ()=>{
+    const chosen=colorInput.value;
+    if(contrastRatio(chosen,bgHex) < MIN_ACCENT_CONTRAST){ showToast('Bu renk bu temada yeterince görünür değil, farklı bir renk seç'); renderAccentColorRow(rowEl,currentHex,bgHex,onSelect); return; }
+    onSelect(chosen); renderAccentColorRow(rowEl, chosen, bgHex, onSelect);
+  });
+  customSwatch.appendChild(colorInput); rowEl.appendChild(customSwatch);
+}
+
+function openAppearanceModal(){
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Görünüm Ayarları</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface-2);border-radius:9px;">
+          <span style="font-size:13px;font-weight:600;">Detaylı görünüm seçeneklerini göster</span>
+          <label style="position:relative;display:inline-block;width:38px;height:22px;">
+            <input type="checkbox" id="ap-advanced-toggle" ${appearanceSettings.advanced?'checked':''} style="opacity:0;width:0;height:0;">
+            <span id="ap-toggle-track" style="position:absolute;inset:0;background:${appearanceSettings.advanced?'var(--accent)':'var(--border)'};border-radius:22px;cursor:pointer;transition:background .15s ease;"></span>
+            <span id="ap-toggle-knob" style="position:absolute;width:16px;height:16px;left:${appearanceSettings.advanced?'19px':'3px'};top:3px;background:#fff;border-radius:50%;transition:left .15s ease;pointer-events:none;"></span>
+          </label>
+        </div>
+        <div id="ap-simple" style="${appearanceSettings.advanced?'display:none':''}">
+          <label class="field-label">Görünüm</label>
+          <div class="option-row">
+            <button class="option-chip${currentThemeMode()==='dark'?' selected':''}" id="ap-pick-dark" style="padding:12px 20px;display:flex;align-items:center;gap:8px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Koyu
+            </button>
+            <button class="option-chip${currentThemeMode()==='light'?' selected':''}" id="ap-pick-light" style="padding:12px 20px;display:flex;align-items:center;gap:8px;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              Açık
+            </button>
+          </div>
+        </div>
+        <div id="ap-advanced" style="${appearanceSettings.advanced?'':'display:none'}">
+          <label class="field-label">Karanlık Temalar</label><div class="theme-row" id="th-dark"></div>
+          <label class="field-label">Aydınlık Temalar</label><div class="theme-row" id="th-light"></div>
+          <label class="field-label">Vurgu Rengi</label><div class="color-row" id="ap-accent-row"></div>
+          <p class="field-hint">Bu ayarlar sadece senin tarayıcında geçerli, ekip arkadaşlarının görünümünü etkilemez.</p>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-primary" id="close-btn">Kapat</button></div>
+    </div></div>`;
+
+  document.getElementById('ap-pick-dark').onclick = ()=>{ applyTheme('graphite'); openAppearanceModal(); };
+  document.getElementById('ap-pick-light').onclick = ()=>{ applyTheme('paper'); openAppearanceModal(); };
+
+  const toggle = document.getElementById('ap-advanced-toggle');
+  const track = document.getElementById('ap-toggle-track');
+  const knob = document.getElementById('ap-toggle-knob');
+  track.onclick = ()=>{
+    appearanceSettings.advanced = !appearanceSettings.advanced;
+    persistAppearance();
+    track.style.background = appearanceSettings.advanced ? 'var(--accent)' : 'var(--border)';
+    knob.style.left = appearanceSettings.advanced ? '19px' : '3px';
+    document.getElementById('ap-simple').style.display = appearanceSettings.advanced ? 'none' : '';
+    document.getElementById('ap-advanced').style.display = appearanceSettings.advanced ? '' : 'none';
+    if(appearanceSettings.advanced) initAdvancedRows();
+  };
+  function initAdvancedRows(){
+    renderAccentColorRow(document.getElementById('ap-accent-row'), appearanceSettings.accent, currentThemeBg(), applyAccent);
+    function buildThemeRow(el, mode){
+      el.innerHTML='';
+      THEME_OPTIONS.filter(t=>t.mode===mode).forEach(t=>{
+        const sw=document.createElement('button'); sw.type='button';
+        sw.className='theme-swatch'+(appearanceSettings.theme===t.id?' selected':'');
+        sw.style.background=t.bg; sw.title=t.label;
+        sw.addEventListener('click', ()=>{
+          applyTheme(t.id);
+          root.querySelectorAll('.theme-swatch').forEach(x=>x.classList.remove('selected'));
+          sw.classList.add('selected');
+          const row=document.getElementById('ap-accent-row'); if(row) renderAccentColorRow(row, appearanceSettings.accent, currentThemeBg(), applyAccent);
+        });
+        el.appendChild(sw);
+      });
+    }
+    buildThemeRow(document.getElementById('th-dark'), 'dark');
+    buildThemeRow(document.getElementById('th-light'), 'light');
+  }
+  if(appearanceSettings.advanced) initAdvancedRows();
+
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+}
+
+/* ============ yerel (senkron olmayan) durum ============ */
+const LOCAL_ID_KEY='akis_identity_userid';
+const LOCAL_GH_KEY='akis_github_config';
+const LOCAL_SEEN_KEY='akis_seen_ids';
+
+function getLocalIdentity(){ return localStorage.getItem(LOCAL_ID_KEY); }
+function setLocalIdentity(id){ localStorage.setItem(LOCAL_ID_KEY, id); }
+function getGhConfig(){ try{ return JSON.parse(localStorage.getItem(LOCAL_GH_KEY)||'null'); }catch(e){ return null; } }
+function setGhConfig(cfg){ localStorage.setItem(LOCAL_GH_KEY, JSON.stringify(cfg)); }
+function getSeenIds(){ try{ return new Set(JSON.parse(localStorage.getItem(LOCAL_SEEN_KEY)||'[]')); }catch(e){ return new Set(); } }
+function markSeen(id){ const s=getSeenIds(); s.add(id); localStorage.setItem(LOCAL_SEEN_KEY, JSON.stringify([...s])); }
+
+/* ============ paylaşılan veri (GitHub üzerinden, her nesne kendi dosyasında) ============ */
+let DB = { users:[], projects:[], appointments:[], approvals:[], notes:[], activityLog:[] };
+let shaMap = {};        // "klasör/dosya.json" -> sha (üzerine yazarken gerekli)
+let ghConfig = getGhConfig();
+let currentUserId = getLocalIdentity();
+let syncTimer = null;
+// hangi koleksiyonlarda kaydedilmemiş değişiklik var — sadece bunlar GitHub'a yazılır.
+// Böylece bir not düzenlemek projelere ya da başkasının dosyasına asla dokunmaz.
+let dirty = { users:false, projects:false, notes:false, appointments:false, approvals:false };
+function markDirty(coll){ dirty[coll] = true; }
+
+function currentUser(){ return DB.users.find(u=>u.id===currentUserId && !u.deleted) || null; }
+function userById(id){ return DB.users.find(u=>u.id===id) || null; }
+function activeUsers(){ return DB.users.filter(u=>!u.deleted); }
+function isAdmin(){ const u=currentUser(); return !!(u && u.isAdmin); }
+
+/* ---- GitHub: her kullanıcı/proje/not/randevu/onay kendi dosyasında saklanır
+   (users/{id}.json, projects/{id}.json, vb.). Tek ve dev bir veri dosyası yerine
+   bu yapı, birinin notunu düzenlerken diğerinin proje eklemesi gibi ilgisiz
+   işlemlerin birbirini ezmesini imkânsız hale getirir — çakışma riski sadece
+   TAM AYNI nesneye aynı anda dokunulmasıyla sınırlı kalır (ki bu da aşağıdaki
+   nesne-bazlı birleştirme ile güvenle ele alınır). ---- */
+const FOLDERS = { users:'users', projects:'projects', notes:'notes', appointments:'appointments', approvals:'approvals' };
+const ACTIVITY_PATH = 'activity.json';
+
+async function ghApi(pathSuffix, opts={}){
+  const url = `https://api.github.com/repos/${ghConfig.owner}/${ghConfig.repo}/${pathSuffix}`;
+  return fetch(url, {
+    ...opts,
+    cache: 'no-store',
+    headers:{
+      'Authorization': `token ${ghConfig.token}`,
+      'Accept':'application/vnd.github+json',
+      'If-None-Match': '',
+      ...(opts.headers||{})
+    }
+  });
+}
+function b64encode(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64decode(str){ return decodeURIComponent(escape(atob(str.replace(/\n/g,'')))); }
+
+function setSyncStatus(text, kind){
+  document.getElementById('sync-text').textContent = text;
+  const dot = document.getElementById('sync-dot');
+  dot.className = 'sync-dot' + (kind ? ' '+kind : '');
+}
+
+async function hashPassword(pw){
+  if(window.crypto && window.crypto.subtle){
+    try{
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pw));
+      return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+    }catch(e){ /* aşağıdaki yedek karmaya düş */ }
+  }
+  // crypto.subtle kullanılamıyorsa basit bir yedek karma (gerçek güvenlik sağlamaz, sadece prototip için)
+  let h1=0,h2=0;
+  for(let i=0;i<pw.length;i++){ const c=pw.charCodeAt(i); h1=(h1*31+c)>>>0; h2=(h2*131+c)>>>0; }
+  return 'fb-'+h1.toString(16)+h2.toString(16);
+}
+
+async function ghListFolder(folder){
+  const res = await ghApi(`contents/${folder}?ref=${ghConfig.branch||'main'}&_ts=${Date.now()}`);
+  if(res.status===404) return [];
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const json = await res.json();
+  return Array.isArray(json) ? json.filter(f=>f.type==='file' && f.name.endsWith('.json')) : [];
+}
+async function ghReadFile(path){
+  const res = await ghApi(`contents/${path}?ref=${ghConfig.branch||'main'}&_ts=${Date.now()}`);
+  if(res.status===404) return null;
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  const json = await res.json();
+  return { sha: json.sha, data: JSON.parse(b64decode(json.content)) };
+}
+async function ghWriteFile(path, dataObj, attempt){
+  attempt = attempt || 1;
+  const body = {
+    message: `akis: ${path} güncellendi`,
+    content: b64encode(JSON.stringify(dataObj, null, 1)),
+    branch: ghConfig.branch||'main'
+  };
+  if(shaMap[path]) body.sha = shaMap[path];
+  const res = await ghApi(`contents/${path}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+  if(res.status===409 && attempt < 4){
+    // biri bu tam dosyayı bizden hemen önce yazdı — güncel sha'yı alıp yeniden dene
+    await new Promise(r=>setTimeout(r, 250*attempt));
+    const fresh = await ghReadFile(path);
+    if(fresh) shaMap[path] = fresh.sha; else delete shaMap[path];
+    return ghWriteFile(path, dataObj, attempt+1);
+  }
+  if(!res.ok){
+    const errJson = await res.json().catch(()=>({}));
+    throw new Error(errJson.message || ('HTTP '+res.status));
+  }
+  const json = await res.json();
+  shaMap[path] = json.content.sha;
+}
+
+/* id bazlı birleştirme yardımcı fonksiyonu — küçük dizileri (ör. dosya listesi) id'ye göre birleştirir */
+function mergeById(remoteArr, localArr, itemMerger){
+  const map = new Map();
+  (remoteArr||[]).forEach(item=> map.set(item.id, item));
+  (localArr||[]).forEach(item=>{
+    const existing = map.get(item.id);
+    if(!existing){ map.set(item.id, item); return; }
+    if(itemMerger){ map.set(item.id, itemMerger(existing, item)); return; }
+    const exT = existing.updatedAt || existing.createdAt || 0;
+    const itT = item.updatedAt || item.createdAt || 0;
+    map.set(item.id, itT >= exT ? item : existing);
+  });
+  return [...map.values()];
+}
+// projenin dosyaları kendi içinde id'ye göre birleşir — biri dosya eklerken diğeri
+// eski bir kopyayı geri yazsa bile dosyalar kaybolmaz (aynı proje aynı anda düzenlenirse)
+function mergeProjectItem(remote, local){
+  const files = mergeById(remote.files||[], local.files||[]);
+  const exT = remote.updatedAt||remote.createdAt||0, itT = local.updatedAt||local.createdAt||0;
+  const base = itT >= exT ? local : remote;
+  return { ...base, files };
+}
+// onaylayanlar listesi kişi bazında birleşir — biri onaylarken diğeri eski kopyayı
+// geri yazsa bile verilen onaylar/redler kaybolmaz (aynı onay aynı anda yanıtlanırsa)
+function mergeApprovalItem(remote, local){
+  const map = new Map();
+  (remote.approvers||[]).forEach(a=> map.set(a.userId, a));
+  (local.approvers||[]).forEach(a=>{
+    const ex = map.get(a.userId);
+    if(!ex){ map.set(a.userId, a); return; }
+    map.set(a.userId, (a.respondedAt||0) >= (ex.respondedAt||0) ? a : ex);
+  });
+  const exT = remote.updatedAt||remote.createdAt||0, itT = local.updatedAt||local.createdAt||0;
+  const base = itT >= exT ? local : remote;
+  return { ...base, approvers:[...map.values()] };
+}
+const ITEM_MERGERS = { projects: mergeProjectItem, approvals: mergeApprovalItem };
+
+// bir nesneyi yazmadan hemen önce GitHub'daki en güncel halini çekip birleştirir —
+// çakışma riski sadece TAM AYNI nesneye aynı anda dokunulduğunda söz konusu olur
+async function writeItemMerged(folder, item){
+  const path = `${folder}/${item.id}.json`;
+  let toWrite = item;
+  try{
+    const remote = await ghReadFile(path);
+    if(remote){
+      shaMap[path] = remote.sha;
+      const merger = ITEM_MERGERS[folder];
+      toWrite = merger ? merger(remote.data, item) : ((remote.data.updatedAt||remote.data.createdAt||0) > (item.updatedAt||item.createdAt||0) ? remote.data : item);
+    }
+  }catch(e){ /* çekemezsek elimizdeki sürümle devam ederiz */ }
+  await ghWriteFile(path, toWrite);
+  return toWrite;
+}
+
+// aynı kullanıcı adına sahip birden fazla hesap oluşursa (nadir bir senkron yarışı
+// sonucunda) hangisinin "gerçek" olduğuna karar verip diğerlerini işaretler —
+// admin varsa admin öncelikli, yoksa en eski hesap kalır
+function dedupeUsersByUsername(){
+  const groups = new Map();
+  DB.users.forEach(u=>{
+    if(!u.username || u.deleted) return;
+    const key = u.username.toLowerCase();
+    if(!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(u);
+  });
+  groups.forEach(list=>{
+    if(list.length < 2) return;
+    list.sort((a,b)=> (b.isAdmin?1:0)-(a.isAdmin?1:0) || (a.createdAt-b.createdAt));
+    list.slice(1).forEach(dup=>{
+      if(dup.id===currentUserId) return; // kendi oturum açtığımız hesabı asla otomatik silme
+      dup.deleted = true; dup.updatedAt = Date.now();
+      markDirty('users');
+    });
+  });
+}
+
+async function ensureSeedAdmin(){
+  if(DB.users.some(u=> (u.username||'').toLowerCase()==='admin')) return false;
+  const now = Date.now();
+  const admin = {
+    id: uid(), username:'admin', passwordHash: await hashPassword('admin1234'),
+    name:'Admin', title:'Sistem Yöneticisi', isAdmin:true, color: avatarColor('Admin'),
+    createdAt:now, updatedAt:now
+  };
+  DB.users.push(admin);
+  await ghWriteFile(`users/${admin.id}.json`, admin);
+  return true;
+}
+
+// tek, global etkinlik günlüğü (ekleme-bazlı, tek dosya) — proje bazlı ayrı log
+// tutmuyoruz ama proje ekranında da bu günlükten filtrelenerek gösteriliyor;
+// tamamına sadece admin panelinden erişilebiliyor
+function logActivity(action, meta){
+  DB.activityLog.push({ id:uid(), at:Date.now(), userId:currentUserId, action, meta: meta||{} });
+}
+
+const LOCAL_CACHE_KEY = 'akis_cache_v1';
+function persistLocalCache(){
+  try{ localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify({ DB, shaMap })); }catch(e){ /* kota dolmuş olabilir, sorun değil */ }
+}
+function loadLocalCache(){
+  try{
+    const raw = localStorage.getItem(LOCAL_CACHE_KEY);
+    if(!raw) return false;
+    const parsed = JSON.parse(raw);
+    if(!parsed || !parsed.DB) return false;
+    DB = parsed.DB; shaMap = parsed.shaMap || {};
+    return true;
+  }catch(e){ return false; }
+}
+
+async function loadFromGithub(){
+  if(!ghConfig) { setSyncStatus('Bağlı değil',''); return; }
+  setSyncStatus('Senkronize ediliyor…','busy');
+  try{
+    const fresh = { users:[], projects:[], notes:[], appointments:[], approvals:[] };
+    for(const key of Object.keys(FOLDERS)){
+      const entries = await ghListFolder(FOLDERS[key]);
+      for(const entry of entries){
+        const file = await ghReadFile(entry.path);
+        if(file){ fresh[key].push(file.data); shaMap[entry.path] = file.sha; }
+      }
+    }
+    const actFile = await ghReadFile(ACTIVITY_PATH);
+    if(actFile) shaMap[ACTIVITY_PATH] = actFile.sha;
+    DB = { ...fresh, activityLog: actFile ? actFile.data : [] };
+
+    dedupeUsersByUsername();
+    const seeded = await ensureSeedAdmin();
+    if(seeded || Object.values(dirty).some(Boolean)) await pushToGithub();
+    persistLocalCache();
+    setSyncStatus('Bağlı — güncel', 'ok');
+  }catch(err){
+    console.error(err);
+    setSyncStatus('Bağlantı hatası', 'err');
+    showToast('GitHub senkron hatası: '+err.message);
+  }
+}
+
+// yalnızca "kirli" (değişmiş) koleksiyonların dosyalarını yazar — ör. sadece not
+// eklediysen sadece notes/ klasörüne yazılır, projelere hiç dokunulmaz
+async function pushToGithub(){
+  if(!ghConfig) return;
+  setSyncStatus('Kaydediliyor…','busy');
+  try{
+    for(const key of Object.keys(FOLDERS)){
+      if(!dirty[key]) continue;
+      for(let i=0;i<DB[key].length;i++){
+        DB[key][i] = await writeItemMerged(FOLDERS[key], DB[key][i]);
+      }
+      dirty[key] = false;
+    }
+    // etkinlik günlüğü küçük ve ekleme-bazlı olduğu için en günceliyle birleştirip yazıyoruz
+    try{
+      const remoteAct = await ghReadFile(ACTIVITY_PATH);
+      if(remoteAct){
+        DB.activityLog = mergeById(remoteAct.data, DB.activityLog);
+        shaMap[ACTIVITY_PATH] = remoteAct.sha;
+      }
+    }catch(e){ /* çekilemezse elimizdekiyle devam */ }
+    await ghWriteFile(ACTIVITY_PATH, DB.activityLog);
+    persistLocalCache();
+    setSyncStatus('Bağlı — güncel','ok');
+    renderAll(); // birleştirme sırasında başkalarının verisi de gelmiş olabilir
+  }catch(err){
+    console.error(err);
+    setSyncStatus('Kaydetme hatası','err');
+    showToast('Kaydedilemedi: '+err.message);
+  }
+}
+
+function scheduleSave(){
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(async ()=>{
+    await pushToGithub();
+    await checkNotifications();
+  }, 900);
+}
+
+async function refreshFromRemote(){
+  if(!ghConfig) return;
+  await loadFromGithub();
+  renderAll();
+  checkNotifications();
+}
+
+/* ============ kimlik / giriş (kullanıcı adı + şifre) ============ */
+function showIdentityGate(){
+  const root = document.getElementById('modal-root');
+  let mode = 'login'; // 'login' | 'register'
+
+  function render(){
+    root.innerHTML = `
+      <div class="gate">
+        <div class="gate-box">
+          <div class="brand-mark">A</div>
+          <h2>${mode==='login' ? 'Giriş Yap' : 'Hesap Oluştur'}</h2>
+          <p>${mode==='login' ? 'Ekibinin ortak alanına giriş yap.' : 'Ekip alanına katılmak için bir hesap oluştur.'}</p>
+          ${mode==='register' ? `
+            <div class="field"><label>Ad Soyad</label><input type="text" id="gate-name" placeholder="Örn. Ayşe Yılmaz"></div>
+            <div class="field"><label>Unvan <span class="small-note">(isteğe bağlı)</span></label><input type="text" id="gate-title" placeholder="Örn. Çalışan, Tasarımcı…"></div>
+          ` : ''}
+          <div class="field"><label>Kullanıcı Adı</label><input type="text" id="gate-username" placeholder="kullanici_adi" autocomplete="username"></div>
+          <div class="field"><label>Şifre</label><input type="password" id="gate-password" placeholder="••••••••" autocomplete="${mode==='login'?'current-password':'new-password'}"></div>
+          ${mode==='register' ? `<div class="field"><label>Şifre (tekrar)</label><input type="password" id="gate-password2" placeholder="••••••••"></div>` : ''}
+          <button class="btn btn-primary" id="gate-submit" style="width:100%;justify-content:center;padding:11px;">${mode==='login'?'Giriş Yap':'Hesap Oluştur'}</button>
+          ${mode==='login' ? `<p class="field-hint" style="text-align:center;">Yönetici hesabı: <b>admin</b> / <b>admin1234</b></p>` : ''}
+          <div class="small-note" style="margin-top:14px;">
+            ${mode==='login' ? `Hesabın yok mu? <a href="#" id="gate-switch" style="color:var(--accent);">Kayıt ol</a>` : `Zaten hesabın var mı? <a href="#" id="gate-switch" style="color:var(--accent);">Giriş yap</a>`}
+          </div>
+        </div>
+      </div>`;
+    document.getElementById('gate-switch').addEventListener('click', e=>{ e.preventDefault(); mode = mode==='login'?'register':'login'; render(); });
+    document.getElementById('gate-submit').addEventListener('click', onSubmit);
+    root.querySelectorAll('input').forEach(inp=> inp.addEventListener('keydown', e=>{ if(e.key==='Enter') onSubmit(); }));
+  }
+
+  async function onSubmit(){
+   try{
+    const username = document.getElementById('gate-username').value.trim().toLowerCase();
+    const password = document.getElementById('gate-password').value;
+    if(!username || !password){ showToast('Kullanıcı adı ve şifre gerekli'); return; }
+
+    if(mode==='login'){
+      const hash = await hashPassword(password);
+      const u = DB.users.find(x=>x.username && x.username.toLowerCase()===username && !x.deleted);
+      if(!u || u.passwordHash !== hash){ showToast('Kullanıcı adı ya da şifre hatalı'); return; }
+      currentUserId = u.id; setLocalIdentity(u.id);
+      logActivity('giris_yapildi', {});
+      root.innerHTML=''; scheduleSave(); renderAll(); checkNotifications();
+      showToast(`Hoş geldin, ${u.name}`);
+
+    } else {
+      const name = document.getElementById('gate-name').value.trim();
+      const title = document.getElementById('gate-title').value.trim() || 'Çalışan';
+      const password2 = document.getElementById('gate-password2').value;
+      if(!name){ showToast('Lütfen adını gir'); return; }
+      if(password.length < 4){ showToast('Şifre en az 4 karakter olmalı'); return; }
+      if(password !== password2){ showToast('Şifreler eşleşmiyor'); return; }
+      if(DB.users.some(x=>x.username && !x.deleted && x.username.toLowerCase()===username)){ showToast('Bu kullanıcı adı zaten alınmış'); return; }
+      const now = Date.now();
+      const newUser = { id: uid(), username, passwordHash: await hashPassword(password), name, title, isAdmin:false, color: avatarColor(name), createdAt: now, updatedAt: now };
+      DB.users.push(newUser);
+      currentUserId = newUser.id; setLocalIdentity(newUser.id);
+      logActivity('kullanici_olusturuldu', { name });
+      markDirty('users');
+      root.innerHTML=''; renderAll(); checkNotifications();
+      await pushToGithub();
+      showToast(`Hoş geldin, ${name}`);
+    }
+   }catch(err){
+     console.error(err);
+     showToast('Bir hata oluştu: '+err.message);
+   }
+  }
+  render();
+}
+
+async function ensureIdentity(){
+  if(!ghConfig){
+    document.getElementById('modal-root').innerHTML = '';
+    return false;
+  }
+  if(currentUserId && !userById(currentUserId)){
+    // hesabımız listede görünmüyor olabilir — senkron gecikmesi ihtimaline karşı bir kez daha çekip emin ol
+    await new Promise(r=>setTimeout(r, 1000));
+    await loadFromGithub();
+  }
+  if(!currentUserId || !userById(currentUserId) || userById(currentUserId).deleted){
+    showIdentityGate();
+    return false;
+  }
+  return true;
+}
+
+function logout(){
+  currentUserId = null;
+  localStorage.removeItem(LOCAL_ID_KEY);
+  showIdentityGate();
+}
+
+/* ============ GitHub ayar modalı ============ */
+function openGithubModal(){
+  const cfg = ghConfig || {owner:'',repo:'',token:'',branch:'main'};
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov">
+      <div class="modal">
+        <div class="modal-head"><h3>GitHub Bağlantısı</h3><button class="icon-btn" id="close-x">✕</button></div>
+        <div class="modal-body">
+          <p class="small-note">Ekipteki bir kişi (ör. IT) private bir GitHub repo'su açar ve bir erişim tokenı (fine-grained personal access token, sadece bu repo'ya "Contents: read/write" izniyle) oluşturur. Bu token'ı ekip arkadaşlarına verir, herkes aynı repo'yu ortak veritabanı gibi kullanır. Token bu tarayıcıda yerel olarak saklanır, paylaşılan veriye asla yazılmaz. Veri, çakışmaları en aza indirmek için repo içinde <code>users/</code>, <code>projects/</code>, <code>notes/</code> gibi klasörlerde kişi/nesne başına ayrı dosyalar halinde tutulur — bunu elle düzenlemene gerek yok, uygulama otomatik yönetiyor.</p>
+          <div class="field"><label>Repo Sahibi (kullanıcı/organizasyon)</label><input type="text" id="gh-owner" value="${esc(cfg.owner)}" placeholder="örn. sirketim"></div>
+          <div class="field"><label>Repo Adı</label><input type="text" id="gh-repo" value="${esc(cfg.repo)}" placeholder="örn. akis-veritabani"></div>
+          <div class="field"><label>Branch</label><input type="text" id="gh-branch" value="${esc(cfg.branch||'main')}" placeholder="main"></div>
+          <div class="field"><label>Access Token</label><input type="text" id="gh-token" value="${esc(cfg.token)}" placeholder="ghp_… veya github_pat_…"></div>
+        </div>
+        <div class="modal-foot">
+          <button class="btn btn-ghost" id="close-btn">Vazgeç</button>
+          <button class="btn btn-primary" id="save-gh">Bağlan &amp; Kaydet</button>
+        </div>
+      </div>
+    </div>`;
+  const close = ()=>{ root.innerHTML=''; };
+  document.getElementById('close-x').onclick = close;
+  document.getElementById('close-btn').onclick = close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('save-gh').onclick = async ()=>{
+    const owner = document.getElementById('gh-owner').value.trim();
+    const repo = document.getElementById('gh-repo').value.trim();
+    const branch = document.getElementById('gh-branch').value.trim() || 'main';
+    const token = document.getElementById('gh-token').value.trim();
+    if(!owner||!repo||!token){ showToast('Tüm alanları doldur'); return; }
+    ghConfig = {owner,repo,branch,token};
+    setGhConfig(ghConfig);
+    close();
+    await loadFromGithub();
+    await ensureIdentity();
+    renderAll();
+    startPolling();
+  };
+}
+
+/* ============ bildirim / favicon rozet ============ */
+function setFaviconBadge(count){
+  const canvas = document.createElement('canvas');
+  canvas.width=32; canvas.height=32;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle='#e8a33d'; ctx.beginPath(); ctx.arc(16,16,15,0,7); ctx.fill();
+  ctx.fillStyle='#1a1305'; ctx.font='bold 16px sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('A',16,17);
+  if(count>0){
+    ctx.fillStyle='#e5595e'; ctx.beginPath(); ctx.arc(24,8,8,0,7); ctx.fill();
+    ctx.fillStyle='#fff'; ctx.font='bold 11px sans-serif'; ctx.fillText(count>9?'9+':String(count),24,9);
+  }
+  document.getElementById('favicon-link').href = canvas.toDataURL();
+}
+
+// herhangi bir öncelikte "seni ilgilendiren, yanıt bekleyen" her şey — zil ikonu için
+function pendingItemsForMe(){
+  const me = currentUser();
+  if(!me) return [];
+  const items = [];
+  DB.appointments.filter(a=>a.withUserId===me.id && a.status==='pending')
+    .forEach(a=>items.push({type:'appointment', id:a.id, urgency:a.urgency, text:`${userById(a.requestedByUserId)?.name||a.requestedByText||'Biri'} seninle ${aptTimeRangeFull(a)} için randevu oluşturdu: “${a.title}”`, data:a}));
+  DB.approvals.forEach(ap=>{
+    const mine = ap.approvers.find(x=>x.userId===me.id && x.status==='pending');
+    if(mine) items.push({type:'approval', id:ap.id+':'+me.id, urgency:ap.urgency, text:`${userById(ap.requesterId)?.name||'Biri'} senden onay istiyor: “${ap.title}”`, data:ap});
+  });
+  return items.sort((a,b)=> (b.urgency==='urgent')-(a.urgency==='urgent'));
+}
+function pendingUrgentItemsForMe(){ return pendingItemsForMe().filter(i=>i.urgency==='urgent'); }
+
+function renderNotifDot(){
+  const count = pendingItemsForMe().length;
+  const dot = document.getElementById('notif-dot');
+  if(dot) dot.classList.toggle('show', count>0);
+}
+
+function openNotifPanel(){
+  const items = pendingItemsForMe();
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Seni İlgilendirenler</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        ${items.length ? items.map(item=>`
+          <div class="approver-row" style="cursor:pointer;" data-open="${item.type}:${item.data.id}">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="dot" style="width:8px;height:8px;border-radius:50%;background:${item.urgency==='urgent'?'var(--danger)':item.urgency==='important'?'var(--important)':'var(--text-faint)'};flex-shrink:0;"></span>
+              <div style="font-size:12.5px;">${esc(item.text)}</div>
+            </div>
+          </div>`).join('') : '<div class="team-empty">Şu an bekleyen bir şey yok</div>'}
+      </div>
+      <div class="modal-foot"><button class="btn btn-primary" id="close-btn">Kapat</button></div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  root.querySelectorAll('[data-open]').forEach(row=> row.addEventListener('click', ()=>{
+    const [type,id] = row.dataset.open.split(':');
+    close();
+    if(type==='appointment') openAppointmentDetail(id); else openApprovalDetail(id);
+  }));
+}
+
+function checkNotifications(){
+  renderNotifDot();
+  const seen = getSeenIds();
+  const items = pendingUrgentItemsForMe().filter(i=>!seen.has(i.id));
+  setFaviconBadge(items.length);
+  const stack = document.getElementById('sticky-stack');
+  stack.innerHTML='';
+  items.slice(0,4).forEach(item=>{
+    const el = document.createElement('div');
+    el.className='sticky-note';
+    el.innerHTML = `
+      <div class="head">🔴 Acil ${item.type==='appointment'?'Randevu Talebi':'Onay Talebi'}</div>
+      <p>${esc(item.text)}</p>
+      <div class="row">
+        ${item.type==='appointment' ? `
+          <button class="btn btn-sm btn-success" data-act="apt-accept" data-id="${item.data.id}">Onayla</button>
+          <button class="btn btn-sm btn-ghost" data-act="apt-postpone" data-id="${item.data.id}">Ertele</button>
+          <button class="btn btn-sm btn-danger" data-act="apt-reject" data-id="${item.data.id}">Reddet</button>
+        ` : `
+          <button class="btn btn-sm btn-success" data-act="ap-approve" data-id="${item.data.id}">Onayla</button>
+          <button class="btn btn-sm btn-danger" data-act="ap-reject" data-id="${item.data.id}">Reddet</button>
+        `}
+        <button class="btn btn-sm btn-ghost" data-act="dismiss" data-seen="${item.id}">Kapat</button>
+      </div>`;
+    stack.appendChild(el);
+  });
+  stack.querySelectorAll('button').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const act = btn.dataset.act;
+      const id = btn.dataset.id;
+      if(act==='dismiss'){ markSeen(btn.dataset.seen); checkNotifications(); return; }
+      if(act.startsWith('apt-')){
+        const apt = DB.appointments.find(a=>a.id===id);
+        if(act==='apt-accept') respondAppointment(apt,'accepted');
+        if(act==='apt-postpone') openPostponeModal(apt);
+        if(act==='apt-reject') openRejectNoteModal(apt, 'appointment');
+      } else {
+        const ap = DB.approvals.find(a=>a.id===id);
+        if(act==='ap-approve') respondApproval(ap, currentUserId, 'approved');
+        if(act==='ap-reject') openRejectNoteModal(ap, 'approval');
+      }
+    });
+  });
+}
+
+/* ============ arayüz durumu ============ */
+let activeTab = 'projects';
+let activePanel = 'me';
+let searchTerm = '';
+
+const TABS = [
+  {key:'projects', label:'Projeler', icon:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>'},
+  {key:'appointments', label:'Randevular', icon:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>'},
+  {key:'approvals', label:'Onaylar', icon:'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>'},
+  {key:'notes', label:'Notlar', icon:'<path d="M15 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="15 3 15 9 21 9"/>'},
+  {key:'activity', label:'Etkinlik', icon:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>'}
+];
+function tabIcon(icon){ return `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>`; }
+
+// bir kullanıcının "kendi" etkinlik akışı: kendi yaptığı işlemler + görebildiği projelerdeki işlemler
+function myActivityEntries(me){
+  const myProjectIds = new Set(DB.projects.filter(p=>canSee(p, me.id)).map(p=>p.id));
+  return DB.activityLog.filter(l=> l.userId===me.id || (l.meta && l.meta.projectId && myProjectIds.has(l.meta.projectId)));
+}
+
+function renderAll(){
+  renderTopIdentity();
+  renderSubtabs();
+  renderContent();
+  renderTeamPanel();
+}
+
+function renderTopIdentity(){
+  const chip = document.getElementById('identity-chip');
+  const me = currentUser();
+  const adminBtn = document.getElementById('admin-btn');
+  if(!me){ chip.innerHTML=''; adminBtn.style.display='none'; return; }
+  chip.innerHTML = `<div class="avatar" style="background:${me.color}">${initials(me.name)}</div>
+    <div class="who"><b>${esc(me.name)}${me.isAdmin?'<span class="admin-tag">👑 ADMIN</span>':''}</b><span>${esc(me.title)}</span></div>`;
+  chip.onclick = ()=> openIdentityEdit();
+  chip.style.cursor='pointer';
+  adminBtn.style.display = me.isAdmin ? 'flex' : 'none';
+}
+
+function renderSubtabs(){
+  const wrap = document.getElementById('subtabs');
+  const me = currentUser();
+  wrap.innerHTML = TABS.map(t=>{
+    let count = 0;
+    if(!me) count = 0;
+    else if(t.key==='projects') count = DB.projects.filter(p=>canSee(p, me.id)).length;
+    else if(t.key==='appointments') count = DB.appointments.filter(a=>a.withUserId===me.id || a.requestedByUserId===me.id).length;
+    else if(t.key==='approvals') count = DB.approvals.filter(a=>a.requesterId===me.id || a.approvers.some(x=>x.userId===me.id)).length;
+    else if(t.key==='notes') count = DB.notes.filter(n=>canSee(n, me.id)).length;
+    else if(t.key==='activity') count = myActivityEntries(me).length;
+    return `<button class="subtab ${activeTab===t.key?'active':''}" data-tab="${t.key}">${tabIcon(t.icon)}${t.label} <span class="count">${count}</span></button>`;
+  }).join('');
+  wrap.querySelectorAll('.subtab').forEach(b=> b.onclick = ()=>{ activeTab=b.dataset.tab; searchTerm=''; document.getElementById('search-input').value=''; renderContent(); renderSubtabs(); });
+  document.getElementById('new-btn').style.display = activeTab==='activity' ? 'none' : '';
+  document.getElementById('new-btn').textContent = {
+    projects:'+ Yeni Proje', appointments:'+ Yeni Randevu', approvals:'+ Onay Talebi', notes:'+ Yeni Not'
+  }[activeTab];
+}
+
+function canSee(item, userId){
+  if(item.deleted) return false;
+  if(item.visibility==='all' || !item.visibility) return true;
+  return item.ownerId===userId || (item.visibleTo||[]).includes(userId);
+}
+
+function renderContent(){
+  const area = document.getElementById('content-area');
+  const me = currentUser();
+  if(!me){ area.innerHTML=''; return; }
+  if(activeTab==='projects') return renderProjects(area, me);
+  if(activeTab==='appointments') return renderAppointments(area, me);
+  if(activeTab==='approvals') return renderApprovals(area, me);
+  if(activeTab==='notes') return renderNotes(area, me);
+  if(activeTab==='activity') return renderMyActivity(area, me);
+}
+
+/* ---------- ETKİNLİK (herkesin kendi görebildiği log paneli — proje ekranında log yok) ---------- */
+function renderMyActivity(area, me){
+  const ACTION_LABELS = {
+    giris_yapildi:'giriş yaptı', kullanici_olusturuldu:'hesap oluşturdu',
+    proje_olusturuldu:'proje oluşturdu', proje_duzenlendi:'projeyi düzenledi', proje_silindi:'proje sildi',
+    dosya_eklendi:'dosya ekledi', dosya_silindi:'dosya sildi',
+    randevu_olusturuldu:'randevu önerdi', randevu_yanit:'randevuya yanıt verdi',
+    onay_talebi_olusturuldu:'onay talebi oluşturdu', onay_yanit:'onay talebine yanıt verdi',
+    not_olusturuldu:'not oluşturdu', not_duzenlendi:'notu düzenledi', not_silindi:'not sildi'
+  };
+  const entries = myActivityEntries(me).slice().sort((a,b)=>b.at-a.at).slice(0,200);
+  if(!entries.length){ area.innerHTML = emptyState('🕓','Henüz etkinlik yok','Sen ya da görebildiğin projelerde biri bir şey yaptığında burada görünecek.'); return; }
+  area.innerHTML = `<div style="display:flex;flex-direction:column;gap:8px;max-width:640px;">${entries.map(l=>{
+    const label = ACTION_LABELS[l.action] || l.action;
+    const proj = l.meta && l.meta.projectId ? DB.projects.find(p=>p.id===l.meta.projectId) : null;
+    return `<div style="font-size:12.5px;padding:10px 12px;background:var(--surface);border:1px solid var(--border-soft);border-radius:9px;">
+      <b>${esc(userById(l.userId)?.name||'—')}</b> ${esc(label)}${proj?` — ${esc(proj.title)}`:''} <span class="small-note">· ${timeAgo(l.at)}</span>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+/* ---------- PROJELER ---------- */
+function renderProjects(area, me){
+  let list = DB.projects.filter(p=>canSee(p, me.id));
+  if(searchTerm) list = list.filter(p=> (p.title+p.desc).toLowerCase().includes(searchTerm.toLowerCase()));
+  const hasOrder = list.some(p=>p.order!=null);
+  list = list.slice().sort((a,b)=> hasOrder ? ((a.order??1e15)-(b.order??1e15)) : ((b.updatedAt||b.createdAt)-(a.updatedAt||a.createdAt)));
+  if(!list.length){ area.innerHTML = emptyState('📁','Henüz proje yok','İlk projeni oluşturarak başla. Kategoriler, aciliyet seviyesi ve görünürlük ayarlarını sonra ekleyebilirsin.'); return; }
+  area.innerHTML = `<div class="grid" id="projects-grid">${list.map(p=>{
+    const cover = p.coverFileId ? (p.files||[]).find(f=>f.id===p.coverFileId) : null;
+    const body = `
+      <div class="card-top"><div class="card-title">${esc(p.title)}</div></div>
+      <div class="card-desc">${esc(p.desc||'Açıklama yok')}</div>
+      <div class="card-meta">
+        <span>${esc(userById(p.ownerId)?.name||'—')}</span>·
+        <span>${(p.files||[]).length} dosya</span>·
+        <span>${timeAgo(p.updatedAt||p.createdAt)}</span>
+      </div>`;
+    return `<div class="card ${p.urgency==='urgent'?'urg-urgent':p.urgency==='important'?'urg-important':''} ${cover?'has-cover':''}" data-id="${p.id}">
+      ${cover ? `<div class="card-cover" style="background-image:url('${cover.dataUrl}')"></div><div class="card-cover-body">${body}</div>` : body}
+    </div>`;
+  }).join('')}</div>`;
+  setupProjectDragReorder(document.getElementById('projects-grid'));
+}
+
+/* Defter'deki mantığın aynısı: kart basılı tutulup sürüklenince havada bir kopya olarak
+   takip eder, bıraktığı yerde bir boşluk (placeholder) açılır, diğer kartlar da FLIP
+   tekniğiyle (önce/sonra konumu ölçüp aradaki farkı animasyonla kapatarak) kenara
+   kayıp yumuşakça yer açar — tıklamayla açma ile karışmasın diye kısa bir "basılı tut" eşiği var. */
+function setupProjectDragReorder(grid){
+  const LONG_PRESS_MS = 220, MOVE_CANCEL_PX = 8, REORDER_THROTTLE_MS = 120, SWAP_HYSTERESIS_PX = 22;
+  let dragState = null, lastReorderAt = 0;
+
+  function onDragMove(ev){
+    if(!dragState || ev.pointerId !== dragState.pointerId) return;
+    ev.preventDefault();
+    const dx = ev.clientX - dragState.startX, dy = ev.clientY - dragState.startY;
+    dragState.card.style.transform = `translate(${dx}px, ${dy}px) scale(1.045)`;
+    const now = performance.now();
+    if(now - lastReorderAt < REORDER_THROTTLE_MS) return;
+    const phBox = dragState.placeholder.getBoundingClientRect();
+    const phx = phBox.left+phBox.width/2, phy = phBox.top+phBox.height/2;
+    const distToPh = Math.hypot(ev.clientX-phx, ev.clientY-phy);
+    const others = [...grid.querySelectorAll('.card')].filter(c=>c!==dragState.card);
+    let closest=null, closestDist=Infinity;
+    others.forEach(c=>{
+      const box=c.getBoundingClientRect(); const cx=box.left+box.width/2, cy=box.top+box.height/2;
+      const dist=Math.hypot(ev.clientX-cx, ev.clientY-cy);
+      if(dist<closestDist){ closestDist=dist; closest=c; }
+    });
+    if(closest && closestDist < distToPh - SWAP_HYSTERESIS_PX){
+      lastReorderAt = now;
+      const flipTargets = [...grid.children].filter(c=>c!==dragState.card);
+      const firstRects = new Map(flipTargets.map(c=>[c, c.getBoundingClientRect()]));
+      const all = [...grid.children];
+      const phIdx = all.indexOf(dragState.placeholder), tgtIdx = all.indexOf(closest);
+      if(phIdx<tgtIdx) grid.insertBefore(dragState.placeholder, closest.nextSibling);
+      else grid.insertBefore(dragState.placeholder, closest);
+      flipTargets.forEach(c=>{
+        const first=firstRects.get(c), last=c.getBoundingClientRect();
+        const ddx=first.left-last.left, ddy=first.top-last.top;
+        if(ddx||ddy){
+          c.style.transition='none'; c.style.transform=`translate(${ddx}px,${ddy}px)`;
+          requestAnimationFrame(()=>{ c.style.transition='transform .18s var(--ease-spring)'; c.style.transform=''; });
+        }
+      });
+    }
+  }
+  function onDragEnd(ev){
+    if(!dragState || ev.pointerId !== dragState.pointerId) return;
+    const { card, placeholder, pointerId } = dragState;
+    const floatingRect = card.getBoundingClientRect();
+    grid.insertBefore(card, placeholder);
+    grid.removeChild(placeholder);
+    card.classList.remove('dragging-float');
+    card.style.position=''; card.style.left=''; card.style.top=''; card.style.width=''; card.style.height='';
+    card.style.transition='none';
+    const finalRect = card.getBoundingClientRect();
+    const ddx = floatingRect.left-finalRect.left, ddy = floatingRect.top-finalRect.top;
+    card.style.transform = `translate(${ddx}px, ${ddy}px) scale(1.045)`;
+    requestAnimationFrame(()=>{ card.style.transition='transform .24s var(--ease-spring)'; card.style.transform=''; });
+    setTimeout(()=>{ card.style.transition=''; }, 280);
+    document.removeEventListener('pointermove', onDragMove);
+    document.removeEventListener('pointerup', onDragEnd);
+    document.removeEventListener('pointercancel', onDragEnd);
+    try{ card.releasePointerCapture(pointerId); }catch(err){}
+    card.style.touchAction = '';
+    card.dataset.justDragged = '1';
+    dragState = null;
+
+    [...grid.querySelectorAll('.card')].forEach((el,i)=>{
+      const proj = DB.projects.find(x=>x.id===el.dataset.id);
+      if(proj && proj.order!==i){ proj.order=i; proj.updatedAt=Date.now(); }
+    });
+    markDirty('projects'); scheduleSave();
+  }
+  function activateDrag(card, pointerId, startX, startY){
+    try{ card.setPointerCapture(pointerId); }catch(err){}
+    if(navigator.vibrate) navigator.vibrate(10);
+    const rect = card.getBoundingClientRect();
+    const placeholder = document.createElement('div');
+    placeholder.className = 'card-placeholder';
+    placeholder.style.width = rect.width+'px'; placeholder.style.height = rect.height+'px';
+    grid.insertBefore(placeholder, card);
+    card.classList.add('dragging-float');
+    card.style.width = rect.width+'px'; card.style.height = rect.height+'px';
+    card.style.left = rect.left+'px'; card.style.top = rect.top+'px';
+    card.style.touchAction = 'none';
+    card.style.transition = 'box-shadow .12s ease, transform .12s ease';
+    card.style.transform = 'scale(1.045)';
+    dragState = { card, placeholder, pointerId, startX, startY };
+    document.addEventListener('pointermove', onDragMove, {passive:false});
+    document.addEventListener('pointerup', onDragEnd);
+    document.addEventListener('pointercancel', onDragEnd);
+  }
+  grid.querySelectorAll('.card').forEach(card=>{
+    card.addEventListener('click', ()=>{ if(card.dataset.justDragged){ delete card.dataset.justDragged; return; } openProjectDetail(card.dataset.id); });
+    card.addEventListener('pointerdown', e=>{
+      if(e.pointerType==='mouse' && e.button!==0) return;
+      const startX=e.clientX, startY=e.clientY, pointerId=e.pointerId;
+      let done=false;
+      const timer = setTimeout(()=>{ if(done) return; done=true; cleanup(); activateDrag(card, pointerId, startX, startY); }, LONG_PRESS_MS);
+      function onMove(ev){
+        if(ev.pointerId!==pointerId || done) return;
+        if(Math.hypot(ev.clientX-startX, ev.clientY-startY) > MOVE_CANCEL_PX){ done=true; clearTimeout(timer); cleanup(); }
+      }
+      function onUp(ev){ if(ev.pointerId!==pointerId || done) return; done=true; clearTimeout(timer); cleanup(); }
+      function cleanup(){ document.removeEventListener('pointermove', onMove); document.removeEventListener('pointerup', onUp); document.removeEventListener('pointercancel', onUp); }
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+      document.addEventListener('pointercancel', onUp);
+    });
+  });
+}
+
+function openProjectModal(){
+  const me = currentUser();
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov">
+      <div class="modal modal-wide">
+        <div class="modal-head"><h3>Yeni Proje</h3><button class="icon-btn" id="close-x">✕</button></div>
+        <div class="modal-body two-col">
+          <div class="col-left">
+            <div class="field"><label>Proje Adı</label><input type="text" id="p-title" placeholder="Proje adı"></div>
+            <div class="field"><label>Açıklama</label><textarea id="p-desc" placeholder="Kısaca ne yapılacak?" style="min-height:110px;"></textarea></div>
+            <div class="field"><label>Görünürlük</label>
+              <div class="people-pick" id="p-visibility">
+                <div class="chip active" data-v="all">Herkese açık</div>
+                <div class="chip" data-v="custom">Sadece seçtiklerim</div>
+              </div>
+            </div>
+            <div class="field" id="p-visible-people" style="display:none">
+              <label>Kimler görsün?</label>
+              <div class="people-pick">${activeUsers().filter(u=>u.id!==me.id).map(u=>`<div class="chip" data-uid="${u.id}">${esc(u.name)}${u.isAdmin?' 👑':''}</div>`).join('') || '<span class="small-note">Başka kullanıcı yok</span>'}</div>
+            </div>
+          </div>
+          <div class="col-right">
+            <div class="field"><label>Öncelik</label>
+              <div class="urgency-dots" id="p-urgency"><div class="urgency-dot-opt active" data-v="normal" title="Normal"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="important" title="Önemli"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="urgent" title="Acil"><span class="dot"></span></div></div>
+            </div>
+            <div class="field" style="flex:1;display:flex;flex-direction:column;">
+              <label>Dosyalar</label>
+              <label class="file-drop-big" id="p-file-drop">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Dosya eklemek için tıkla ya da sürükle</span>
+                <input type="file" id="p-file-input" multiple style="display:none;">
+              </label>
+              <div class="file-grid" id="p-pending-files" style="margin-top:8px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="save-p">Oluştur</button></div>
+      </div>
+    </div>`;
+  let urgency='normal', visibility='all'; const visibleTo=new Set(); const pendingFiles=[];
+  root.querySelectorAll('#p-urgency .urgency-dot-opt').forEach(o=> o.onclick=()=>{ urgency=o.dataset.v; root.querySelectorAll('#p-urgency .urgency-dot-opt').forEach(x=>x.classList.remove('active')); o.classList.add('active'); });
+  root.querySelectorAll('#p-visibility .chip').forEach(o=> o.onclick=()=>{ visibility=o.dataset.v; root.querySelectorAll('#p-visibility .chip').forEach(x=>x.classList.remove('active')); o.classList.add('active'); document.getElementById('p-visible-people').style.display = visibility==='custom'?'block':'none'; });
+  root.querySelectorAll('#p-visible-people .chip').forEach(o=> o.onclick=()=>{ o.classList.toggle('active'); const uidv=o.dataset.uid; if(visibleTo.has(uidv)) visibleTo.delete(uidv); else visibleTo.add(uidv); });
+  function renderPendingFiles(){
+    document.getElementById('p-pending-files').innerHTML = pendingFiles.map((f,i)=>`
+      <div class="file-chip">
+        ${f.type && f.type.startsWith('image/') ? `<img src="${f.dataUrl}">` : `<div class="file-icon">📄</div>`}
+        <div class="file-name">${esc(f.name)}</div>
+        <button class="file-del" data-i="${i}">✕</button>
+      </div>`).join('');
+    document.querySelectorAll('#p-pending-files [data-i]').forEach(b=> b.onclick=()=>{ pendingFiles.splice(+b.dataset.i,1); renderPendingFiles(); });
+  }
+  document.getElementById('p-file-input').addEventListener('change', function(){
+    [...this.files].forEach(file=>{
+      const reader = new FileReader();
+      reader.onload = ()=>{ pendingFiles.push({ id:uid(), name:file.name, type:file.type, size:file.size, dataUrl:reader.result, uploadedBy:me.id, uploadedAt:Date.now() }); renderPendingFiles(); };
+      reader.readAsDataURL(file);
+    });
+  });
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('save-p').onclick = ()=>{
+    const title = document.getElementById('p-title').value.trim();
+    if(!title){ showToast('Başlık gerekli'); return; }
+    const desc = document.getElementById('p-desc').value.trim();
+    const p = { id:uid(), title, desc, urgency, visibility, visibleTo:[...visibleTo], ownerId:me.id, status:'active', files:pendingFiles, createdAt:Date.now(), updatedAt:Date.now() };
+    DB.projects.push(p); logActivity('proje_olusturuldu', { title, projectId:p.id });
+    markDirty('projects'); close(); scheduleSave(); renderAll(); showToast('Proje oluşturuldu');
+  };
+}
+
+function openProjectDetail(id){
+  const p = DB.projects.find(x=>x.id===id); if(!p) return;
+  const me = currentUser();
+  const canEdit = p.ownerId===me.id || isAdmin();
+  p.files = p.files || [];
+  const urgColor = p.urgency==='urgent' ? 'var(--danger)' : p.urgency==='important' ? 'var(--important)' : 'var(--text-faint)';
+  const siblingProjects = DB.projects.filter(x=>canSee(x, me.id)).sort((a,b)=>(a.order??1e15)-(b.order??1e15));
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov">
+      <div class="modal workspace-modal">
+        <div class="ws-top" style="border-top:3px solid ${urgColor};">
+          <input type="text" id="pd-title-input" value="${esc(p.title)}" class="ws-title-input" ${canEdit?'':'readonly'} title="${urgencyLabel(p.urgency||'normal')} öncelik">
+          <div class="ws-top-actions">
+            ${canEdit ? `<button class="icon-btn" id="pd-del-btn" title="Sil"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>` : ''}
+            <button class="icon-btn" id="close-x">✕</button>
+          </div>
+        </div>
+        <div class="ws-body">
+          <div class="ws-col ws-col-list">
+            ${siblingProjects.map(sp=>`<div class="ws-list-item ${sp.id===p.id?'active':''}" data-goto="${sp.id}"><span class="dot" style="background:${sp.urgency==='urgent'?'var(--danger)':sp.urgency==='important'?'var(--important)':'var(--text-faint)'}"></span>${esc(sp.title)}</div>`).join('')}
+          </div>
+          <div class="ws-col ws-col-mid">
+            <textarea id="pd-desc-input" class="ws-textarea" placeholder="Buraya yaz…" ${canEdit?'':'readonly'}>${esc(p.desc||'')}</textarea>
+          </div>
+          <div class="ws-col-side">
+            <div class="side-box">
+              <div class="side-box-head">Dosyalar</div>
+              <div class="file-grid" id="pd-files">
+                ${p.files.map(f=>{
+                  const isImg = f.type && f.type.startsWith('image/');
+                  const isCover = p.coverFileId===f.id;
+                  return `
+                  <div class="file-chip" data-file="${f.id}">
+                    ${isImg ? `<img src="${f.dataUrl}" alt="${esc(f.name)}" data-preview="${f.id}">` : `<div class="file-icon" data-preview="${f.id}">📄</div>`}
+                    <div class="file-name">${esc(f.name)}</div>
+                    ${isImg && canEdit ? `<button class="file-cover-btn ${isCover?'active':''}" data-cover-file="${f.id}" title="${isCover?'Kapak fotoğrafı':'Kapak yap'}">★</button>` : ''}
+                    ${canEdit ? `<button class="file-del" data-del-file="${f.id}" title="Sil">✕</button>` : ''}
+                  </div>`;
+                }).join('')}
+                ${canEdit ? `<label class="file-add"><input type="file" id="pd-file-input" multiple style="display:none;">+ Dosya</label>` : ''}
+              </div>
+            </div>
+            <div class="side-box side-box-log">
+              <div class="side-box-head">Log</div>
+              <div id="pd-log-list">
+                ${DB.activityLog.filter(l=>l.meta && l.meta.projectId===p.id).slice().reverse().map(l=>{
+                  const label = { proje_olusturuldu:'oluşturdu', proje_duzenlendi:'düzenledi', dosya_eklendi:'dosya ekledi', dosya_silindi:'dosya sildi' }[l.action] || l.action;
+                  return `<div class="log-row"><b>${esc(userById(l.userId)?.name||'—')}</b> ${label}${l.meta.fileName?` — ${esc(l.meta.fileName)}`:''}<span class="small-note">${timeAgo(l.at)}</span></div>`;
+                }).join('') || '<div class="team-empty">Henüz kayıt yok</div>'}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ws-foot">${esc(userById(p.ownerId)?.name||'—')} · ${fmtDate(p.createdAt)}${p.updatedAt && p.updatedAt!==p.createdAt ? ' · düzenlendi '+timeAgo(p.updatedAt) : ''}</div>
+      </div>
+    </div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  root.querySelectorAll('[data-goto]').forEach(el=> el.addEventListener('click', ()=>{ if(el.dataset.goto!==p.id) openProjectDetail(el.dataset.goto); }));
+
+  const delBtn = document.getElementById('pd-del-btn');
+  if(delBtn) delBtn.onclick = ()=>{
+    if(!confirm('Bu projeyi silmek istiyor musun?')) return;
+    p.deleted = true; p.updatedAt = Date.now();
+    logActivity('proje_silindi', { title:p.title, projectId:p.id });
+    markDirty('projects'); close(); scheduleSave(); renderAll(); showToast('Proje silindi');
+  };
+
+  if(canEdit){
+    const titleInput = document.getElementById('pd-title-input');
+    const descInput = document.getElementById('pd-desc-input');
+    const origTitle = p.title, origDesc = p.desc||'';
+    let saveTimer = null;
+    function scheduleFieldSave(){
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>{
+        p.title = titleInput.value.trim() || p.title;
+        p.desc = descInput.value;
+        p.updatedAt = Date.now();
+        markDirty('projects'); scheduleSave();
+      }, 700);
+    }
+    function logIfChanged(){
+      if(p.title!==origTitle || (p.desc||'')!==origDesc){
+        logActivity('proje_duzenlendi', { projectId:p.id, title:p.title });
+        const logList = document.getElementById('pd-log-list');
+        if(logList) logList.innerHTML = DB.activityLog.filter(l=>l.meta && l.meta.projectId===p.id).slice().reverse().map(l=>{
+          const label = { proje_olusturuldu:'oluşturdu', proje_duzenlendi:'düzenledi', dosya_eklendi:'dosya ekledi', dosya_silindi:'dosya sildi' }[l.action] || l.action;
+          return `<div class="log-row"><b>${esc(userById(l.userId)?.name||'—')}</b> ${label}${l.meta.fileName?` — ${esc(l.meta.fileName)}`:''}<span class="small-note">${timeAgo(l.at)}</span></div>`;
+        }).join('') || '<div class="team-empty">Henüz kayıt yok</div>';
+      }
+    }
+    titleInput.addEventListener('input', scheduleFieldSave);
+    descInput.addEventListener('input', scheduleFieldSave);
+    titleInput.addEventListener('blur', logIfChanged);
+    descInput.addEventListener('blur', logIfChanged);
+  }
+
+  const fileInput = document.getElementById('pd-file-input');
+  if(fileInput) fileInput.addEventListener('change', ()=>{
+    const files = [...fileInput.files];
+    let remaining = files.length;
+    if(!remaining) return;
+    files.forEach(file=>{
+      const reader = new FileReader();
+      reader.onload = ()=>{
+        p.files.push({ id:uid(), name:file.name, type:file.type, size:file.size, dataUrl:reader.result, uploadedBy:me.id, uploadedAt:Date.now() });
+        p.updatedAt = Date.now();
+        logActivity('dosya_eklendi', { projectId:p.id, fileName:file.name });
+        remaining--;
+        if(remaining===0){ markDirty('projects'); scheduleSave(); close(); openProjectDetail(id); }
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+  root.querySelectorAll('[data-preview]').forEach(el=> el.addEventListener('click', ()=>{
+    const f = p.files.find(x=>x.id===el.dataset.preview);
+    if(f) window.open(f.dataUrl, '_blank');
+  }));
+  root.querySelectorAll('[data-cover-file]').forEach(b=> b.addEventListener('click', e=>{
+    e.preventDefault(); e.stopPropagation();
+    p.coverFileId = (p.coverFileId===b.dataset.coverFile) ? null : b.dataset.coverFile;
+    p.updatedAt = Date.now();
+    markDirty('projects'); scheduleSave(); close(); openProjectDetail(id);
+  }));
+  root.querySelectorAll('[data-del-file]').forEach(b=> b.addEventListener('click', e=>{
+    e.preventDefault(); e.stopPropagation();
+    const f = p.files.find(x=>x.id===b.dataset.delFile);
+    p.files = p.files.filter(f=>f.id!==b.dataset.delFile);
+    if(p.coverFileId===b.dataset.delFile) p.coverFileId = null;
+    p.updatedAt = Date.now();
+    if(f) logActivity('dosya_silindi', { projectId:p.id, fileName:f.name });
+    markDirty('projects'); scheduleSave(); close(); openProjectDetail(id);
+  }));
+}
+
+/* ---------- RANDEVULAR ---------- */
+let calMonth = new Date().getMonth();
+let calYear = new Date().getFullYear();
+
+function renderAppointments(area, me){
+  const myApts = DB.appointments.filter(a=> a.withUserId===me.id || a.requestedByUserId===me.id);
+  area.innerHTML = `
+    <div class="apt-layout">
+      <div class="card cal-card" style="cursor:default;">
+        <div class="cal-head">
+          <button class="btn btn-sm btn-ghost" id="cal-prev">←</button>
+          <b id="cal-label">${new Date(calYear,calMonth,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'})}</b>
+          <button class="btn btn-sm btn-ghost" id="cal-next">→</button>
+        </div>
+        <div class="cal-hr"></div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legend"><span><i class="apt-dot"></i>Onaylı</span><span><i class="apt-dot urgent"></i>Acil</span></div>
+      </div>
+      <div class="apt-divider"></div>
+      <div id="apt-list"></div>
+    </div>`;
+  renderCalendarGrid(myApts, me);
+  function updateCalLabel(){ document.getElementById('cal-label').textContent = new Date(calYear,calMonth,1).toLocaleDateString('tr-TR',{month:'long',year:'numeric'}); }
+  document.getElementById('cal-prev').onclick = ()=>{ calMonth--; if(calMonth<0){calMonth=11;calYear--;} updateCalLabel(); renderCalendarGrid(myApts, me); };
+  document.getElementById('cal-next').onclick = ()=>{ calMonth++; if(calMonth>11){calMonth=0;calYear++;} updateCalLabel(); renderCalendarGrid(myApts, me); };
+
+  let list = myApts.slice().sort((a,b)=> (a.date+a.time).localeCompare(b.date+b.time));
+  if(searchTerm) list = list.filter(a=>a.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  const listEl = document.getElementById('apt-list');
+  if(!list.length){ listEl.innerHTML = emptyState('📅','Henüz randevu yok','Yeni randevu oluşturup bir ekip arkadaşına atayabilirsin.'); return; }
+  listEl.innerHTML = `<div class="grid">${list.map(a=>{
+    const withMe = a.withUserId===me.id;
+    const other = withMe ? userById(a.requestedByUserId) : userById(a.withUserId);
+    const statusBadge = {pending:'badge-pending',accepted:'badge-success',postponed:'badge-important',rejected:'badge-urgent'}[a.status];
+    const statusLabel = {pending:'Bekliyor',accepted:'Onaylandı',postponed:'Erteleme önerildi',rejected:'Reddedildi'}[a.status];
+    return `<div class="card ${a.urgency==='urgent'?'urg-urgent':a.urgency==='important'?'urg-important':''}" data-id="${a.id}">
+      <div class="card-top"><div class="card-title">${esc(a.title)}</div></div>
+      <div class="card-desc">${withMe?'Talep eden':'Randevu verilen'}: ${esc(other?.name || a.requestedByText || '—')}${a.requestedByText?` <span class="small-note">(${esc(a.requestedByText)})</span>`:''}</div>
+      <div class="card-meta"><span>${aptTimeRangeFull(a)}</span><span class="badge ${statusBadge}">${statusLabel}</span></div>
+    </div>`;
+  }).join('')}</div>`;
+  listEl.querySelectorAll('.card').forEach(c=> c.onclick=()=> openAppointmentDetail(c.dataset.id));
+}
+
+function renderCalendarGrid(myApts, me){
+  const grid = document.getElementById('cal-grid');
+  const dows = ['Pt','Sa','Ça','Pe','Cu','Ct','Pz'];
+  let html = dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  const first = new Date(calYear, calMonth, 1);
+  let startOffset = (first.getDay()+6)%7; // Pazartesi başlangıçlı
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const todayStr = new Date().toISOString().slice(0,10);
+  const prevMonthDays = new Date(calYear, calMonth, 0).getDate();
+  for(let i=startOffset;i>0;i--) html += `<div class="cal-day other"><span class="num">${prevMonthDays-i+1}</span></div>`;
+  for(let d=1; d<=daysInMonth; d++){
+    const dateStr = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayApts = myApts.filter(a=>a.date===dateStr && a.status==='accepted');
+    const titleAttr = dayApts.map(a=>`${aptTimeRangeShort(a)} ${a.title}`).join(', ');
+    html += `<div class="cal-day ${dateStr===todayStr?'today':''}" data-date="${dateStr}" title="${esc(titleAttr)}">
+      <span class="num">${d}</span>
+      <span class="dots">${dayApts.slice(0,4).map(a=>`<span class="apt-dot ${a.urgency==='urgent'?'urgent':''}"></span>`).join('')}</span>
+    </div>`;
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('.cal-day[data-date]').forEach(d=> d.onclick = ()=> openDayPanel(d.dataset.date));
+}
+
+function openDayPanel(dateStr){
+  const me = currentUser();
+  const dayApts = DB.appointments.filter(a=> (a.withUserId===me.id || a.requestedByUserId===me.id) && a.date===dateStr)
+    .sort((a,b)=> (a.time||'').localeCompare(b.time||''));
+  const dateLabel = new Date(dateStr+'T00:00:00').toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',weekday:'long'});
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>${esc(dateLabel)}</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        ${dayApts.length ? `<div style="display:flex;flex-direction:column;gap:8px;">${dayApts.map(a=>{
+          const statusBadge = {pending:'badge-pending',accepted:'badge-success',postponed:'badge-important',rejected:'badge-urgent'}[a.status];
+          const statusLabel = {pending:'Bekliyor',accepted:'Onaylandı',postponed:'Erteleme önerildi',rejected:'Reddedildi'}[a.status];
+          return `<div class="approver-row" style="cursor:pointer;" data-open="${a.id}">
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span class="dot" style="width:8px;height:8px;border-radius:50%;background:${a.urgency==='urgent'?'var(--danger)':a.urgency==='important'?'var(--important)':'var(--text-faint)'};flex-shrink:0;"></span>
+              <div><b style="font-size:13px;">${aptTimeRangeShort(a)} — ${esc(a.title)}</b><div class="approver-note">${esc(userById(a.withUserId===me.id?a.requestedByUserId:a.withUserId)?.name||'—')}</div></div>
+            </div>
+            <span class="badge ${statusBadge}">${statusLabel}</span>
+          </div>`;
+        }).join('')}</div>` : `<p class="small-note">Bu gün için henüz bir randevu yok.</p>`}
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Kapat</button><button class="btn btn-primary" id="day-add">+ Yeni Randevu</button></div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('day-add').onclick = ()=>{ close(); openAppointmentModal(dateStr); };
+  root.querySelectorAll('[data-open]').forEach(row=> row.addEventListener('click', ()=>{ close(); openAppointmentDetail(row.dataset.open); }));
+}
+
+function openAppointmentModal(prefillDate){
+  const me = currentUser();
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov">
+      <div class="modal">
+        <div class="modal-head"><h3>Yeni Randevu</h3><button class="icon-btn" id="close-x">✕</button></div>
+        <div class="modal-body">
+          <div class="field"><label>Başlık</label><input type="text" id="a-title" placeholder="örn. Bütçe görüşmesi"></div>
+          <div class="field"><label>Kiminle</label>
+            <select id="a-with">${activeUsers().filter(u=>u.id!==me.id).map(u=>`<option value="${u.id}">${esc(u.name)}${u.isAdmin?' (Admin)':''}</option>`).join('')}</select>
+          </div>
+          <div class="field"><label>Randevu isteyen <span class="small-note">(serbest metin, opsiyonel)</span></label>
+            <input type="text" id="a-reqtext" placeholder="örn. Muhasebe departmanı adına">
+          </div>
+          <div style="display:flex;gap:10px;">
+            <div class="field" style="flex:1;"><label>Tarih</label><input type="date" id="a-date" value="${prefillDate||''}"></div>
+            <div class="field" style="flex:1;"><label>Başlangıç Saati</label><input type="time" id="a-time" value="10:00"></div>
+          </div>
+          <div class="field"><label>Süre</label>
+            <div class="option-row" id="a-duration">
+              <button type="button" class="option-chip" data-d="15">15 dk</button>
+              <button type="button" class="option-chip selected" data-d="30">30 dk</button>
+              <button type="button" class="option-chip" data-d="60">1 sa</button>
+            </div>
+          </div>
+          <div class="field"><label>Öncelik</label>
+            <div class="urgency-dots" id="a-urgency"><div class="urgency-dot-opt active" data-v="normal" title="Normal"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="important" title="Önemli"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="urgent" title="Acil"><span class="dot"></span></div></div>
+          </div>
+        </div>
+        <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="save-a">Randevu Öner</button></div>
+      </div>
+    </div>`;
+  let urgency='normal', durationMin=30;
+  root.querySelectorAll('#a-duration .option-chip').forEach(o=> o.onclick=()=>{ durationMin=+o.dataset.d; root.querySelectorAll('#a-duration .option-chip').forEach(x=>x.classList.remove('selected')); o.classList.add('selected'); });
+  root.querySelectorAll('#a-urgency .urgency-dot-opt').forEach(o=> o.onclick=()=>{ urgency=o.dataset.v; root.querySelectorAll('#a-urgency .urgency-dot-opt').forEach(x=>x.classList.remove('active')); o.classList.add('active'); });
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('save-a').onclick = ()=>{
+    const title = document.getElementById('a-title').value.trim();
+    const withUserId = document.getElementById('a-with').value;
+    const date = document.getElementById('a-date').value;
+    const time = document.getElementById('a-time').value;
+    if(!title||!date||!withUserId){ showToast('Başlık, kişi ve tarih gerekli'); return; }
+    const now = Date.now();
+    const a = { id:uid(), title, withUserId, requestedByUserId:me.id, requestedByText: document.getElementById('a-reqtext').value.trim(), date, time, durationMin, urgency, status:'pending', responseNote:'', createdAt:now, updatedAt:now };
+    DB.appointments.push(a); logActivity('randevu_olusturuldu', { title, appointmentId:a.id, withUser:userById(withUserId)?.name });
+    markDirty('appointments'); close(); scheduleSave(); renderAll();
+    showToast('Randevu önerisi gönderildi');
+  };
+}
+
+function openAppointmentDetail(id){
+  const a = DB.appointments.find(x=>x.id===id); if(!a) return;
+  const me = currentUser();
+  const withMe = a.withUserId===me.id;
+  const root = document.getElementById('modal-root');
+  const urgColor = a.urgency==='urgent' ? 'var(--danger)' : a.urgency==='important' ? 'var(--important)' : 'transparent';
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov">
+      <div class="modal" style="border-top-color:${urgColor};">
+        <div class="modal-head"><h3>${esc(a.title)}</h3><button class="icon-btn" id="close-x">✕</button></div>
+        <div class="modal-body">
+          <div class="card-meta"><span>${aptTimeRangeFull(a)}</span></div>
+          <p style="font-size:13.5px;color:var(--text-dim);">Talep eden: <b>${esc(userById(a.requestedByUserId)?.name||'—')}</b>${a.requestedByText?` — ${esc(a.requestedByText)}`:''}</p>
+          <p style="font-size:13.5px;color:var(--text-dim);">Randevu verilen: <b>${esc(userById(a.withUserId)?.name||'—')}</b></p>
+          ${a.responseNote?`<div class="approver-note">Not: ${esc(a.responseNote)}</div>`:''}
+        </div>
+        <div class="modal-foot">
+          ${withMe && a.status==='pending' ? `
+            <button class="btn btn-success btn-sm" id="acc">Onayla</button>
+            <button class="btn btn-ghost btn-sm" id="post">Ertele</button>
+            <button class="btn btn-danger btn-sm" id="rej">Reddet</button>
+          ` : `<button class="btn btn-ghost" id="close-btn">Kapat</button>`}
+        </div>
+      </div>
+    </div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  const cb = document.getElementById('close-btn'); if(cb) cb.onclick=close;
+  const accBtn = document.getElementById('acc'); if(accBtn) accBtn.onclick=()=>{ respondAppointment(a,'accepted'); close(); };
+  const postBtn = document.getElementById('post'); if(postBtn) postBtn.onclick=()=>{ close(); openPostponeModal(a); };
+  const rejBtn = document.getElementById('rej'); if(rejBtn) rejBtn.onclick=()=>{ close(); openRejectNoteModal(a,'appointment'); };
+}
+
+function respondAppointment(a, status, note){
+  a.status = status; if(note) a.responseNote = note; a.updatedAt = Date.now();
+  logActivity('randevu_yanit', { appointmentId:a.id, title:a.title, status });
+  markDirty('appointments'); scheduleSave(); renderAll(); checkNotifications();
+  showToast(status==='accepted' ? 'Randevu onaylandı ve takvime eklendi' : 'Yanıt kaydedildi');
+}
+
+function openPostponeModal(a){
+  const root = document.getElementById('modal-root');
+  const curD = a.durationMin||30;
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Erteleme Öner</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div style="display:flex;gap:10px;">
+          <div class="field" style="flex:1;"><label>Yeni Tarih</label><input type="date" id="pp-date" value="${a.date}"></div>
+          <div class="field" style="flex:1;"><label>Yeni Başlangıç Saati</label><input type="time" id="pp-time" value="${a.time}"></div>
+        </div>
+        <div class="field"><label>Süre</label>
+          <div class="option-row" id="pp-duration">
+            <button type="button" class="option-chip ${curD===15?'selected':''}" data-d="15">15 dk</button>
+            <button type="button" class="option-chip ${curD===30?'selected':''}" data-d="30">30 dk</button>
+            <button type="button" class="option-chip ${curD===60?'selected':''}" data-d="60">1 sa</button>
+          </div>
+        </div>
+        <div class="field"><label>Not</label><textarea id="pp-note" placeholder="Neden erteleme öneriyorsun?"></textarea></div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="pp-save">Öneriyi Gönder</button></div>
+    </div></div>`;
+  let durationMin = curD;
+  root.querySelectorAll('#pp-duration .option-chip').forEach(o=> o.onclick=()=>{ durationMin=+o.dataset.d; root.querySelectorAll('#pp-duration .option-chip').forEach(x=>x.classList.remove('selected')); o.classList.add('selected'); });
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('pp-save').onclick = ()=>{
+    a.date = document.getElementById('pp-date').value;
+    a.time = document.getElementById('pp-time').value;
+    a.durationMin = durationMin;
+    a.status = 'postponed';
+    a.responseNote = document.getElementById('pp-note').value.trim();
+    a.updatedAt = Date.now();
+    markDirty('appointments'); close(); scheduleSave(); renderAll(); checkNotifications();
+    showToast('Erteleme önerisi gönderildi');
+  };
+}
+
+function openRejectNoteModal(item, type){
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Reddet</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body"><div class="field"><label>Not (isteğe bağlı)</label><textarea id="rj-note" placeholder="Kısa bir açıklama bırak"></textarea></div></div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-danger" id="rj-save">Reddet</button></div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('rj-save').onclick = ()=>{
+    const note = document.getElementById('rj-note').value.trim();
+    if(type==='appointment') respondAppointment(item,'rejected',note);
+    else respondApproval(item, currentUserId, 'rejected', note);
+    close();
+  };
+}
+
+/* ---------- ONAYLAR ---------- */
+function renderApprovals(area, me){
+  let list = DB.approvals.filter(a=> a.requesterId===me.id || a.approvers.some(x=>x.userId===me.id));
+  if(searchTerm) list = list.filter(a=>a.title.toLowerCase().includes(searchTerm.toLowerCase()));
+  list = list.slice().sort((a,b)=>b.createdAt-a.createdAt);
+  if(!list.length){ area.innerHTML = emptyState('✅','Henüz onay talebi yok','Bir işin onaylanması gerektiğinde, istediğin kadar kişiden onay isteyebilirsin.'); return; }
+  area.innerHTML = `<div class="grid">${list.map(a=>{
+    const approved = a.approvers.filter(x=>x.status==='approved').length;
+    const rejected = a.approvers.filter(x=>x.status==='rejected').length;
+    const total = a.approvers.length;
+    const mine = a.approvers.find(x=>x.userId===me.id);
+    return `<div class="card ${a.urgency==='urgent'?'urg-urgent':a.urgency==='important'?'urg-important':''}" data-id="${a.id}">
+      <div class="card-top"><div class="card-title">${esc(a.title)}</div></div>
+      <div class="card-desc">${esc(a.description||'')}</div>
+      <div class="card-meta">
+        <span>${esc(userById(a.requesterId)?.name||'—')} → ${total} kişi</span>
+        <span class="badge badge-success">${approved} onay</span>
+        ${rejected?`<span class="badge badge-urgent">${rejected} red</span>`:''}
+        ${mine && mine.status==='pending' && mine.userId!==a.requesterId ? `<span class="badge badge-pending">Senden bekleniyor</span>`:''}
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+  area.querySelectorAll('.card').forEach(c=> c.onclick=()=> openApprovalDetail(c.dataset.id));
+}
+
+function openApprovalModal(){
+  const me = currentUser();
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Onay Talebi Oluştur</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div class="field"><label>Başlık</label><input type="text" id="ap-title" placeholder="örn. Q4 pazarlama bütçesi"></div>
+        <div class="field"><label>Açıklama</label><textarea id="ap-desc" placeholder="Onay verecek kişilerin bilmesi gerekenler"></textarea></div>
+        <div class="field"><label>Öncelik</label>
+          <div class="urgency-dots" id="ap-urgency"><div class="urgency-dot-opt active" data-v="normal" title="Normal"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="important" title="Önemli"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="urgent" title="Acil"><span class="dot"></span></div></div>
+        </div>
+        <div class="field"><label>Kimden onay istiyorsun? <span class="small-note">(birden fazla seçilebilir)</span></label>
+          <div class="people-pick">${activeUsers().filter(u=>u.id!==me.id).map(u=>`<div class="chip" data-uid="${u.id}">${esc(u.name)}${u.isAdmin?' 👑':''}</div>`).join('') || '<span class="small-note">Başka kullanıcı yok</span>'}</div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="ap-save">Gönder</button></div>
+    </div></div>`;
+  let urgency='normal'; const chosen=new Set();
+  root.querySelectorAll('#ap-urgency .urgency-dot-opt').forEach(o=> o.onclick=()=>{ urgency=o.dataset.v; root.querySelectorAll('#ap-urgency .urgency-dot-opt').forEach(x=>x.classList.remove('active')); o.classList.add('active'); });
+  root.querySelectorAll('.people-pick .chip').forEach(o=> o.onclick=()=>{ o.classList.toggle('active'); const u=o.dataset.uid; if(chosen.has(u)) chosen.delete(u); else chosen.add(u); });
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('ap-save').onclick = ()=>{
+    const title = document.getElementById('ap-title').value.trim();
+    if(!title){ showToast('Başlık gerekli'); return; }
+    if(!chosen.size){ showToast('En az bir kişi seç'); return; }
+    const now = Date.now();
+    const ap = {
+      id:uid(), title, description:document.getElementById('ap-desc').value.trim(), urgency,
+      requesterId:me.id, approvers:[...chosen].map(u=>({userId:u,status:'pending',note:'',respondedAt:null})),
+      createdAt:now, updatedAt:now
+    };
+    DB.approvals.push(ap); logActivity('onay_talebi_olusturuldu', { title, approvalId:ap.id });
+    markDirty('approvals'); close(); scheduleSave(); renderAll();
+    showToast('Onay talebi gönderildi');
+  };
+}
+
+function openApprovalDetail(id){
+  const a = DB.approvals.find(x=>x.id===id); if(!a) return;
+  const me = currentUser();
+  const mine = a.approvers.find(x=>x.userId===me.id);
+  const root = document.getElementById('modal-root');
+  const urgColor = a.urgency==='urgent' ? 'var(--danger)' : a.urgency==='important' ? 'var(--important)' : 'transparent';
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal" style="border-top-color:${urgColor};">
+      <div class="modal-head"><h3>${esc(a.title)}</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div class="card-meta"><span>Talep eden: ${esc(userById(a.requesterId)?.name||'—')}</span></div>
+        <p style="font-size:13.5px;color:var(--text-dim);">${esc(a.description||'')}</p>
+        <div class="field"><label>Onay Durumu</label>
+          ${a.approvers.map(ap=>{
+            const badgeCls = ap.status==='approved'?'badge-success':ap.status==='rejected'?'badge-urgent':'badge-pending';
+            const label = ap.status==='approved'?'Onayladı':ap.status==='rejected'?'Reddetti':'Bekliyor';
+            return `<div class="approver-row"><div><b style="font-size:13px;">${esc(userById(ap.userId)?.name||'—')}</b>${ap.note?`<div class="approver-note">${esc(ap.note)}</div>`:''}</div><span class="badge ${badgeCls}">${label}</span></div>`;
+          }).join('')}
+        </div>
+      </div>
+      <div class="modal-foot">
+        ${mine && mine.status==='pending' ? `
+          <button class="btn btn-danger btn-sm" id="rej">Reddet</button>
+          <button class="btn btn-success btn-sm" id="app">Onayla</button>
+        ` : `<button class="btn btn-ghost" id="close-btn">Kapat</button>`}
+      </div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  const cb=document.getElementById('close-btn'); if(cb) cb.onclick=close;
+  const appBtn=document.getElementById('app'); if(appBtn) appBtn.onclick=()=>{ respondApproval(a, me.id, 'approved'); close(); };
+  const rejBtn=document.getElementById('rej'); if(rejBtn) rejBtn.onclick=()=>{ close(); openRejectNoteModal(a,'approval'); };
+}
+
+function respondApproval(ap, userId, status, note){
+  const row = ap.approvers.find(x=>x.userId===userId);
+  if(!row) return;
+  row.status = status; row.note = note||''; row.respondedAt = Date.now(); ap.updatedAt = Date.now();
+  logActivity('onay_yanit', { approvalId:ap.id, title:ap.title, status });
+  markDirty('approvals'); scheduleSave(); renderAll(); checkNotifications();
+  showToast(status==='approved' ? 'Onayladın' : 'Reddettin');
+}
+
+/* ---------- NOTLAR (gerçek yapışkan not tarzı) ---------- */
+function rotFor(id){ let h=0; for(const c of id) h=(h*31+c.charCodeAt(0))%100; return (h/100*8-4).toFixed(1)+'deg'; }
+
+function renderNotes(area, me){
+  let list = DB.notes.filter(n=>canSee(n, me.id));
+  if(searchTerm) list = list.filter(n=>n.text.toLowerCase().includes(searchTerm.toLowerCase()));
+  list = list.slice().sort((a,b)=>a.createdAt-b.createdAt);
+  if(!list.length){ area.innerHTML = emptyState('📝','Henüz not yok','Hızlı hatırlatmalar ve yapılacaklar için not bırak.'); return; }
+  area.innerHTML = `<div class="notes-canvas" id="notes-canvas">${list.map((n,i)=>{
+    const urg = n.urgency || 'normal';
+    const x = (n.x!=null) ? n.x : 16 + (i%8)*94;
+    const y = (n.y!=null) ? n.y : 16 + Math.floor(i/8)*94;
+    const canEdit = n.ownerId===me.id || isAdmin();
+    return `<div class="paper-note pn-${urg}" style="left:${x}px;top:${y}px;--rot:${rotFor(n.id)}" data-id="${n.id}">
+      <div class="pn-collapsed-icon">${esc(n.text.slice(0,5))}</div>
+      <div class="pn-full">
+        <div class="pn-head">
+          ${canEdit ? `<button class="pn-close" data-del="${n.id}">✕</button>` : '<span></span>'}
+        </div>
+        <textarea class="pn-text" data-note-text="${n.id}" ${canEdit?'':'readonly'} placeholder="Yaz…">${esc(n.text)}</textarea>
+        <div class="pn-foot">
+          <span>${esc(userById(n.ownerId)?.name||'—')} · ${n.editedAt ? 'Düzenlendi '+new Date(n.editedAt).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'}) : timeAgo(n.createdAt)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+
+  const canvas = document.getElementById('notes-canvas');
+  area.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', e=>{
+    e.stopPropagation();
+    if(confirm('Bu notu silmek istiyor musun?')){ const n=DB.notes.find(x=>x.id===b.dataset.del); if(n){ n.deleted=true; n.updatedAt=Date.now(); logActivity('not_silindi', { noteId:n.id }); markDirty('notes'); } scheduleSave(); renderAll(); }
+  }));
+
+  // notun içine direkt yazılabiliyor — yapışkan not mantığı, ayrı bir panel açılmıyor
+  area.querySelectorAll('[data-note-text]').forEach(ta=>{
+    const n = DB.notes.find(x=>x.id===ta.dataset.noteText);
+    if(!n) return;
+    const origText = n.text;
+    let saveTimer = null;
+    ta.addEventListener('pointerdown', e=> e.stopPropagation());
+    ta.addEventListener('click', e=> e.stopPropagation());
+    ta.addEventListener('input', ()=>{
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(()=>{
+        n.text = ta.value;
+        n.updatedAt = Date.now();
+        markDirty('notes'); scheduleSave();
+      }, 500);
+    });
+    ta.addEventListener('blur', ()=>{
+      if(n.text !== origText){
+        n.history = n.history || [];
+        n.history.push({ text: origText, at: n.editedAt || n.createdAt });
+        n.editedAt = Date.now();
+        n.updatedAt = Date.now();
+        logActivity('not_duzenlendi', { noteId:n.id });
+        markDirty('notes'); scheduleSave();
+        const foot = ta.closest('.pn-full').querySelector('.pn-foot span');
+        if(foot) foot.textContent = `${userById(n.ownerId)?.name||'—'} · Düzenlendi ${new Date(n.editedAt).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}`;
+      }
+      ta.closest('.paper-note').classList.remove('expanded');
+    });
+  });
+
+  // sürükleme: küçük bir sürükleme mesafesine kadar "tıklama" sayılır ve not doğrudan
+  // düzenlenebilir hale açılır (yazı alanına odaklanır), daha fazla hareket edilirse
+  // not tuval üzerinde serbestçe taşınır (konum DB'ye kaydedilir)
+  area.querySelectorAll('.paper-note').forEach(card=>{
+    let startX=0, startY=0, origLeft=0, origTop=0, moved=false, pointerId=null;
+    card.addEventListener('pointerdown', e=>{
+      if(e.target.closest('[data-del],textarea')) return;
+      pointerId = e.pointerId;
+      startX = e.clientX; startY = e.clientY;
+      origLeft = parseFloat(card.style.left)||0; origTop = parseFloat(card.style.top)||0;
+      moved = false;
+      card.classList.add('expanded');
+      try{ card.setPointerCapture(pointerId); }catch(err){}
+    });
+    card.addEventListener('pointermove', e=>{
+      if(pointerId===null || e.pointerId!==pointerId) return;
+      const dx = e.clientX-startX, dy = e.clientY-startY;
+      if(Math.abs(dx)>4 || Math.abs(dy)>4){
+        moved = true;
+        card.classList.add('dragging');
+        const canvasRect = canvas.getBoundingClientRect();
+        let newLeft = origLeft+dx, newTop = origTop+dy;
+        newLeft = Math.max(0, Math.min(newLeft, canvasRect.width-80));
+        newTop = Math.max(0, Math.min(newTop, canvasRect.height-80));
+        card.style.left = newLeft+'px'; card.style.top = newTop+'px';
+      }
+    });
+    card.addEventListener('pointerup', e=>{
+      if(pointerId===null || e.pointerId!==pointerId) return;
+      card.classList.remove('dragging');
+      try{ card.releasePointerCapture(pointerId); }catch(err){}
+      pointerId = null;
+      if(moved){
+        const n = DB.notes.find(x=>x.id===card.dataset.id);
+        if(n){ n.x = parseFloat(card.style.left); n.y = parseFloat(card.style.top); n.updatedAt = Date.now(); markDirty('notes'); scheduleSave(); }
+        setTimeout(()=> card.classList.remove('expanded'), 150);
+      } else {
+        const ta = card.querySelector('textarea');
+        if(ta) setTimeout(()=> ta.focus(), 50);
+      }
+    });
+    card.addEventListener('click', e=>{ if(e.target.closest('textarea')) e.stopPropagation(); });
+  });
+}
+
+function openNoteDetail(id){
+  const n = DB.notes.find(x=>x.id===id); if(!n) return;
+  const me = currentUser();
+  const canEdit = n.ownerId===me.id || isAdmin();
+  const root = document.getElementById('modal-root');
+  const urgColor = n.urgency==='urgent' ? 'var(--danger)' : n.urgency==='important' ? 'var(--important)' : 'transparent';
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal" style="border-top-color:${urgColor};">
+      <div class="modal-head"><h3>Not</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div class="card-meta"><span>${esc(userById(n.ownerId)?.name||'—')}</span><span>${fmtDateTime(n.createdAt)}</span>${n.editedAt?`<span>· düzenlendi ${new Date(n.editedAt).toLocaleTimeString('tr-TR',{hour:'2-digit',minute:'2-digit'})}</span>`:''}</div>
+        ${canEdit ? `<div class="field"><textarea id="nd-text" style="min-height:110px;">${esc(n.text)}</textarea></div>`
+                  : `<p style="font-size:13.5px;line-height:1.6;">${esc(n.text)}</p>`}
+        ${(n.history && n.history.length && (canEdit)) ? `
+          <div class="field"><label>Geçmiş (${n.history.length} önceki sürüm)</label>
+            <div style="display:flex;flex-direction:column;gap:6px;max-height:160px;overflow-y:auto;">
+              ${n.history.slice().reverse().map(h=>`<div style="font-size:12px;padding:8px 10px;background:var(--surface-2);border-radius:8px;"><span class="small-note">${new Date(h.at).toLocaleString('tr-TR')}</span><div style="margin-top:3px;text-decoration:line-through;color:var(--text-faint);">${esc(h.text)}</div></div>`).join('')}
+            </div>
+          </div>` : ''}
+      </div>
+      <div class="modal-foot">
+        ${canEdit ? `<button class="btn btn-danger" id="nd-del">Sil</button><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="nd-save">Kaydet</button>` : `<button class="btn btn-ghost" id="close-btn">Kapat</button>`}
+      </div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  const cb=document.getElementById('close-btn'); if(cb) cb.onclick=close;
+  const delBtn=document.getElementById('nd-del');
+  if(delBtn) delBtn.onclick=()=>{
+    if(confirm('Bu notu silmek istiyor musun?')){ n.deleted=true; n.updatedAt=Date.now(); logActivity('not_silindi', { noteId:n.id }); markDirty('notes'); close(); scheduleSave(); renderAll(); }
+  };
+  const saveBtn=document.getElementById('nd-save');
+  if(saveBtn) saveBtn.onclick=()=>{
+    const newText = document.getElementById('nd-text').value.trim();
+    if(!newText){ showToast('Not boş olamaz'); return; }
+    if(newText !== n.text){
+      n.history = n.history || [];
+      n.history.push({ text:n.text, at: n.editedAt || n.createdAt });
+      n.text = newText;
+      n.editedAt = Date.now();
+      n.updatedAt = Date.now();
+      logActivity('not_duzenlendi', { noteId:n.id });
+      markDirty('notes'); scheduleSave(); showToast('Not güncellendi');
+    }
+    close(); renderAll();
+  };
+}
+
+function openNoteModal(){
+  const me = currentUser();
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Yeni Not</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div class="field"><label>Not</label><textarea id="n-text" placeholder="Kısa bir hatırlatma yaz…"></textarea></div>
+        <div class="field"><label>Öncelik</label>
+          <div class="urgency-dots" id="n-urgency"><div class="urgency-dot-opt active" data-v="normal" title="Normal"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="important" title="Önemli"><span class="dot"></span></div><div class="urgency-dot-opt" data-v="urgent" title="Acil"><span class="dot"></span></div></div>
+        </div>
+        <div class="field"><label>Görünürlük</label>
+          <div class="people-pick" id="n-visibility">
+            <div class="chip active" data-v="all">Herkese açık</div>
+            <div class="chip" data-v="custom">Sadece bana</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="n-save">Ekle</button></div>
+    </div></div>`;
+  let urgency='normal', visibility='all';
+  root.querySelectorAll('#n-urgency .urgency-dot-opt').forEach(o=> o.onclick=()=>{ urgency=o.dataset.v; root.querySelectorAll('#n-urgency .urgency-dot-opt').forEach(x=>x.classList.remove('active')); o.classList.add('active'); });
+  root.querySelectorAll('#n-visibility .chip').forEach(o=> o.onclick=()=>{ visibility=o.dataset.v; root.querySelectorAll('#n-visibility .chip').forEach(x=>x.classList.remove('active')); o.classList.add('active'); });
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('n-save').onclick = ()=>{
+    const text = document.getElementById('n-text').value.trim();
+    if(!text){ showToast('Not boş olamaz'); return; }
+    const now = Date.now();
+    const i = DB.notes.filter(x=>!x.deleted).length;
+    const newNote = { id:uid(), text, urgency, visibility, visibleTo:[], ownerId:me.id, x:16+(i%8)*94, y:16+Math.floor(i/8)*94, createdAt:now, updatedAt:now };
+    DB.notes.push(newNote); logActivity('not_olusturuldu', { noteId:newNote.id }); markDirty('notes');
+    close(); scheduleSave(); renderAll(); showToast('Not eklendi');
+  };
+}
+
+/* ---------- EKİP PANELİ ---------- */
+function renderTeamPanel(){
+  const grid = document.getElementById('team-grid');
+  const term = (document.getElementById('team-search').value||'').toLowerCase();
+  let users = activeUsers();
+  if(term) users = users.filter(u=>u.name.toLowerCase().includes(term));
+  if(!users.length){ grid.innerHTML = emptyState('👥','Kimse yok','Henüz kayıtlı kullanıcı yok.'); return; }
+  grid.innerHTML = users.map(u=>{
+    const projs = DB.projects.filter(p=>p.ownerId===u.id && canSee(p, currentUserId)).slice(0,4);
+    const notes = DB.notes.filter(n=>n.ownerId===u.id && canSee(n, currentUserId)).slice(0,3);
+    const urgCls = (urg)=> urg==='urgent' ? 'urg-urgent' : urg==='important' ? 'urg-important' : '';
+    return `<div class="team-card">
+      <div class="team-card-head">
+        <div class="avatar" style="background:${u.color}">${initials(u.name)}</div>
+        <div><b>${esc(u.name)}${u.isAdmin?'<span class="admin-tag">👑 ADMIN</span>':''}</b><span>${esc(u.title)}</span></div>
+      </div>
+      <div class="small-note" style="margin-bottom:6px;font-weight:600;color:var(--text-dim);">PROJELER</div>
+      ${projs.length? projs.map(p=>`<div class="team-item ${urgCls(p.urgency)}" data-open-project="${p.id}"><div class="team-item-title">${esc(p.title)} ${urgencyBadge(p.urgency||'normal')}</div><div class="team-item-sub">${timeAgo(p.updatedAt||p.createdAt)}</div></div>`).join('') : '<div class="team-empty">Görünür proje yok</div>'}
+      <div class="small-note" style="margin:10px 0 6px;font-weight:600;color:var(--text-dim);">NOTLAR</div>
+      ${notes.length? notes.map(n=>`<div class="team-item ${urgCls(n.urgency)}" data-open-note="${n.id}"><div class="team-item-title">${esc(n.text)}</div></div>`).join('') : '<div class="team-empty">Görünür not yok</div>'}
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('[data-open-project]').forEach(el=> el.addEventListener('click', ()=> openProjectDetail(el.dataset.openProject)));
+  grid.querySelectorAll('[data-open-note]').forEach(el=> el.addEventListener('click', ()=> openNoteDetail(el.dataset.openNote)));
+}
+
+/* ---------- admin: kullanıcı yönetimi ---------- */
+function openAdminModal(){
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Kullanıcı Yönetimi</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body" id="admin-list"></div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="open-log-btn">📋 Aktivite Günlüğü</button><button class="btn btn-primary" id="close-btn">Kapat</button></div>
+    </div></div>`;
+  const listEl = document.getElementById('admin-list');
+  listEl.innerHTML = DB.users.map(u=>`
+    <div class="approver-row" style="${u.deleted?'opacity:.5;':''}">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="avatar" style="background:${u.color};width:28px;height:28px;font-size:11px;">${initials(u.name)}</div>
+        <div><b style="font-size:13px;">${esc(u.name)} ${u.isAdmin?'👑':''}</b><div class="approver-note">@${esc(u.username||'—')} · ${esc(u.title)}${u.deleted?' · kaldırıldı':''}</div></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+        ${u.deleted ? `<button class="btn btn-sm btn-success" data-restore="${u.id}">Geri Getir</button>` : `
+          <button class="btn btn-sm btn-ghost" data-resetpw="${u.id}">Şifre Sıfırla</button>
+          <button class="btn btn-sm ${u.isAdmin?'btn-primary':'btn-ghost'}" data-toggle-admin="${u.id}">${u.isAdmin?'Admin':'Üye'}</button>
+          <button class="btn btn-sm btn-danger" data-remove="${u.id}">Kaldır</button>
+        `}
+      </div>
+    </div>`).join('');
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('open-log-btn').onclick = ()=>{ close(); openActivityLogModal(); };
+  listEl.querySelectorAll('[data-toggle-admin]').forEach(b=> b.onclick=()=>{
+    const u = userById(b.dataset.toggleAdmin); u.isAdmin=!u.isAdmin; u.updatedAt=Date.now();
+    logActivity('admin_degisti', { hedefKullanici:u.name, yeniDurum:u.isAdmin });
+    markDirty('users'); scheduleSave(); close(); openAdminModal(); renderAll();
+  });
+  listEl.querySelectorAll('[data-remove]').forEach(b=> b.onclick=()=>{
+    if(b.dataset.remove===currentUserId){ showToast('Kendini kaldıramazsın'); return; }
+    if(!confirm('Bu kullanıcıyı kaldırmak istiyor musun? Daha sonra geri getirebilirsin.')) return;
+    const u = userById(b.dataset.remove); u.deleted=true; u.updatedAt=Date.now();
+    logActivity('kullanici_kaldirildi', { hedefKullanici:u.name });
+    markDirty('users'); scheduleSave(); close(); openAdminModal(); renderAll();
+  });
+  listEl.querySelectorAll('[data-restore]').forEach(b=> b.onclick=()=>{
+    const u = userById(b.dataset.restore); u.deleted=false; u.updatedAt=Date.now();
+    logActivity('kullanici_geri_getirildi', { hedefKullanici:u.name });
+    markDirty('users'); scheduleSave(); close(); openAdminModal(); renderAll();
+  });
+  listEl.querySelectorAll('[data-resetpw]').forEach(b=> b.onclick=async ()=>{
+    const u = userById(b.dataset.resetpw);
+    const newPw = window.prompt(`${u.name} için yeni şifre (en az 4 karakter):`);
+    if(!newPw) return;
+    if(newPw.length < 4){ showToast('Şifre en az 4 karakter olmalı'); return; }
+    u.passwordHash = await hashPassword(newPw); u.updatedAt = Date.now();
+    logActivity('sifre_sifirlandi', { hedefKullanici:u.name });
+    markDirty('users'); scheduleSave(); showToast(`${u.name} için şifre güncellendi`);
+  });
+}
+
+function openActivityLogModal(){
+  const root = document.getElementById('modal-root');
+  const ACTION_LABELS = {
+    giris_yapildi:'giriş yaptı', kullanici_olusturuldu:'hesap oluşturdu', kullanici_kaldirildi:'kullanıcı kaldırıldı',
+    kullanici_geri_getirildi:'kullanıcı geri getirildi', admin_degisti:'admin durumu değişti', sifre_sifirlandi:'şifre sıfırlandı',
+    proje_olusturuldu:'proje oluşturdu', proje_duzenlendi:'proje düzenledi', proje_silindi:'proje sildi',
+    dosya_eklendi:'dosya ekledi', dosya_silindi:'dosya sildi',
+    randevu_olusturuldu:'randevu önerdi', randevu_yanit:'randevuya yanıt verdi',
+    onay_talebi_olusturuldu:'onay talebi oluşturdu', onay_yanit:'onay talebine yanıt verdi',
+    not_olusturuldu:'not oluşturdu', not_duzenlendi:'notu düzenledi', not_silindi:'not sildi'
+  };
+  const entries = DB.activityLog.slice().sort((a,b)=>b.at-a.at).slice(0,300);
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal" style="max-width:600px;">
+      <div class="modal-head"><h3>Aktivite Günlüğü</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <p class="field-hint">Sadece adminler görebilir. Son ${entries.length} kayıt gösteriliyor.</p>
+        <div style="display:flex;flex-direction:column;gap:6px;max-height:60vh;overflow-y:auto;">
+          ${entries.length ? entries.map(e=>{
+            const label = ACTION_LABELS[e.action] || e.action;
+            const detail = Object.entries(e.meta||{}).map(([k,v])=>`${k}: ${esc(String(v))}`).join(' · ');
+            return `<div style="font-size:12.5px;padding:8px 10px;background:var(--surface-2);border-radius:8px;">
+              <b>${esc(userById(e.userId)?.name||'—')}</b> ${esc(label)} <span class="small-note">· ${new Date(e.at).toLocaleString('tr-TR')}</span>
+              ${detail?`<div class="small-note" style="margin-top:2px;">${detail}</div>`:''}
+            </div>`;
+          }).join('') : '<div class="team-empty">Henüz kayıt yok</div>'}
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-primary" id="close-btn">Kapat</button></div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+}
+
+function openIdentityEdit(){
+  const me = currentUser(); if(!me) return;
+  const root = document.getElementById('modal-root');
+  root.innerHTML = `
+    <div class="modal-overlay" id="ov"><div class="modal">
+      <div class="modal-head"><h3>Profilim</h3><button class="icon-btn" id="close-x">✕</button></div>
+      <div class="modal-body">
+        <div class="field"><label>Ad Soyad</label><input type="text" id="ie-name" value="${esc(me.name)}"></div>
+        <div class="field"><label>Unvan</label><input type="text" id="ie-title" value="${esc(me.title)}"></div>
+        <label class="field-label">Şifreyi Değiştir <span class="small-note" style="text-transform:none;font-weight:400;">(boş bırakırsan değişmez)</span></label>
+        <div class="field"><input type="password" id="ie-pw1" placeholder="Yeni şifre"></div>
+        <div class="field"><input type="password" id="ie-pw2" placeholder="Yeni şifre (tekrar)"></div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" id="close-btn">Vazgeç</button><button class="btn btn-primary" id="ie-save">Kaydet</button></div>
+    </div></div>`;
+  const close=()=>root.innerHTML='';
+  document.getElementById('close-x').onclick=close; document.getElementById('close-btn').onclick=close;
+  document.getElementById('ov').addEventListener('click', e=>{ if(e.target.id==='ov') close(); });
+  document.getElementById('ie-save').onclick=async ()=>{
+    const pw1 = document.getElementById('ie-pw1').value;
+    const pw2 = document.getElementById('ie-pw2').value;
+    if(pw1 || pw2){
+      if(pw1.length < 4){ showToast('Şifre en az 4 karakter olmalı'); return; }
+      if(pw1 !== pw2){ showToast('Şifreler eşleşmiyor'); return; }
+      me.passwordHash = await hashPassword(pw1);
+    }
+    me.name = document.getElementById('ie-name').value.trim()||me.name;
+    me.title = document.getElementById('ie-title').value.trim()||me.title;
+    me.color = avatarColor(me.name);
+    me.updatedAt = Date.now();
+    markDirty('users'); close(); scheduleSave(); renderAll();
+    showToast('Profil güncellendi');
+  };
+}
+
+function emptyState(icon, title, desc){
+  return `<div class="empty-state"><div class="empty-icon">${icon}</div><h3>${title}</h3><p>${desc}</p></div>`;
+}
+
+/* ============ olaylar ============ */
+document.getElementById('panel-switch').addEventListener('click', e=>{
+  const btn = e.target.closest('button'); if(!btn) return;
+  activePanel = btn.dataset.panel;
+  document.querySelectorAll('#panel-switch button').forEach(b=>b.classList.toggle('active', b===btn));
+  document.getElementById('me-panel').style.display = activePanel==='me' ? '' : 'none';
+  document.getElementById('team-panel').style.display = activePanel==='team' ? '' : 'none';
+  if(activePanel==='team') renderTeamPanel();
+});
+document.getElementById('team-search').addEventListener('input', renderTeamPanel);
+document.getElementById('search-input').addEventListener('input', e=>{ searchTerm=e.target.value; renderContent(); });
+document.getElementById('notif-btn').addEventListener('click', openNotifPanel);
+document.getElementById('appearance-btn').addEventListener('click', openAppearanceModal);
+document.getElementById('github-btn').addEventListener('click', openGithubModal);
+document.getElementById('admin-btn').addEventListener('click', openAdminModal);
+document.getElementById('logout-btn').addEventListener('click', ()=>{ if(confirm('Çıkış yapmak istiyor musun?')) logout(); });
+document.getElementById('new-btn').addEventListener('click', ()=>{
+  if(!currentUser()) return;
+  if(activeTab==='projects') openProjectModal();
+  if(activeTab==='appointments') openAppointmentModal();
+  if(activeTab==='approvals') openApprovalModal();
+  if(activeTab==='notes') openNoteModal();
+});
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ const ov=document.querySelector('.modal-overlay'); if(ov) document.getElementById('modal-root').innerHTML=''; } });
+
+/* ============ polling: paylaşımlı veriyi periyodik çek ============ */
+let pollTimer = null;
+function startPolling(){
+  clearInterval(pollTimer);
+  pollTimer = setInterval(refreshFromRemote, 20000); // 20 sn'de bir arka planda senkron
+}
+
+/* ============ başlangıç ============ */
+async function init(){
+  loadAppearance();
+  setFaviconBadge(0);
+  if(ghConfig){
+    // önce (varsa) en son bilinen veriyle anında göster — boş ekranda bekletme.
+    // GitHub'daki gerçek güncel veri arka planda çekilip geldiğinde ekran güncellenir.
+    const hadCache = loadLocalCache();
+    if(hadCache){
+      setSyncStatus('Son bilinen veri — güncelleniyor…','busy');
+      await ensureIdentity();
+      renderAll();
+      checkNotifications();
+    }
+    await loadFromGithub();
+    if(!(await ensureIdentity())){ /* kimlik modali açıldı, kullanıcı dolduracak */ }
+    renderAll();
+    checkNotifications();
+    startPolling();
+  } else {
+    document.getElementById('sync-status').style.opacity='.6';
+    openGithubModal();
+  }
+}
+init();
+
+})();
+</script>
+</body>
+</html>
